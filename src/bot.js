@@ -3,6 +3,7 @@ const {
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
+  PermissionFlagsBits,
 } = require("discord.js");
 const config = require("./config");
 const { statements } = require("./db");
@@ -20,6 +21,47 @@ function parseDuration(value) {
   const multipliers = { m: 60_000, h: 3_600_000, d: 86_400_000 };
   return amount * multipliers[unit];
 }
+
+const REQUIRED_BOT_PERMISSIONS = [
+  PermissionFlagsBits.ViewChannel,
+  PermissionFlagsBits.SendMessages,
+  PermissionFlagsBits.EmbedLinks,
+  PermissionFlagsBits.ReadMessageHistory,
+  PermissionFlagsBits.KickMembers,
+  PermissionFlagsBits.BanMembers,
+  PermissionFlagsBits.ModerateMembers,
+  PermissionFlagsBits.ManageRoles,
+];
+
+const COMMAND_DESCRIPTIONS = [
+  "`!gen-key {user} {robloxuser}` - create a 24-hour key and DM it to the user",
+  "`!prem-gen {user} {robloxuser}` - create a premium key that never expires",
+  "`!revoke_key {user} {key}` - revoke a normal key and DM the notice",
+  "`!revoke_prem {user} {key}` - revoke a premium key and DM the notice",
+  "`!reset_hwid [user]` - reset your HWID, or another user's if you are staff",
+  "`!blacklist {user} {reason}` - add a user to the blacklist",
+  "`!blacklists` - list blacklisted users",
+  "`!unblacklist {user}` - remove a user from the blacklist",
+  "`!ban {user} {reason}` - ban a user",
+  "`!kick {user} {reason}` - kick a user",
+  "`!mute {user} {duration} {reason}` - timeout a user",
+  "`!unmute {user}` - remove a timeout",
+  "`!role {user} {role}` - add a role to a user",
+  "`!unban {userId}` - unban a user by ID",
+  "`!commands` - show this list",
+  "`!check-perms` - check the bot's Discord permissions in this server",
+];
+
+const PERMISSION_LABELS = {
+  [PermissionFlagsBits.ViewChannel.toString()]: "View Channels",
+  [PermissionFlagsBits.SendMessages.toString()]: "Send Messages",
+  [PermissionFlagsBits.EmbedLinks.toString()]: "Embed Links",
+  [PermissionFlagsBits.ReadMessageHistory.toString()]: "Read Message History",
+  [PermissionFlagsBits.KickMembers.toString()]: "Kick Members",
+  [PermissionFlagsBits.BanMembers.toString()]: "Ban Members",
+  [PermissionFlagsBits.ModerateMembers.toString()]: "Moderate Members",
+  [PermissionFlagsBits.ManageRoles.toString()]: "Manage Roles",
+};
 
 async function resolveMember(message, raw) {
   if (!raw) {
@@ -42,6 +84,10 @@ async function resolveMember(message, raw) {
   });
 
   return cached || null;
+}
+
+async function getBotMember(message) {
+  return message.guild.members.me || message.guild.members.fetchMe();
 }
 
 function replyError(message, error) {
@@ -163,6 +209,117 @@ function replyUsage(message, usage) {
     color: "warning",
     title: "Usage",
     description: `\`${usage}\``,
+  });
+}
+
+function permissionName(permission) {
+  return PERMISSION_LABELS[permission.toString()] || String(permission);
+}
+
+async function ensureBotPermissions(message, permissions, actionLabel) {
+  const botMember = await getBotMember(message);
+  const missing = permissions.filter((permission) => !botMember.permissions.has(permission));
+
+  if (!missing.length) {
+    return { ok: true, botMember };
+  }
+
+  await replyEmbed(message, {
+    color: "error",
+    title: "Missing Discord Permission",
+    description: `The bot is missing permission for ${actionLabel}.`,
+    fields: [
+      {
+        name: "Missing",
+        value: missing.map(permissionName).join("\n"),
+        inline: false,
+      },
+    ],
+  });
+
+  return { ok: false, botMember };
+}
+
+async function ensureActionableTarget(message, member, actionLabel) {
+  const botMember = await getBotMember(message);
+
+  const checks = {
+    kick: member.kickable,
+    ban: member.bannable,
+    mute: member.moderatable,
+    unmute: member.moderatable,
+  };
+
+  if (checks[actionLabel]) {
+    return { ok: true, botMember };
+  }
+
+  await replyEmbed(message, {
+    color: "error",
+    title: "Role Hierarchy Issue",
+    description: `The bot cannot ${actionLabel} **${member.user.tag}**.`,
+    fields: [
+      {
+        name: "Why This Happens",
+        value: "The bot's highest role must be above the target user, and the target cannot be a server administrator.",
+        inline: false,
+      },
+      {
+        name: "Bot Highest Role",
+        value: botMember.roles.highest.name,
+        inline: true,
+      },
+      {
+        name: "Target Highest Role",
+        value: member.roles.highest.name,
+        inline: true,
+      },
+    ],
+  });
+
+  return { ok: false, botMember };
+}
+
+async function handleCommands(message) {
+  await replyEmbed(message, {
+    color: "info",
+    title: "Luminia Hub Commands",
+    description: COMMAND_DESCRIPTIONS.join("\n"),
+  });
+}
+
+async function handleCheckPerms(message) {
+  if (!(await ensureAdmin(message))) {
+    return;
+  }
+
+  const botMember = await getBotMember(message);
+  const fields = REQUIRED_BOT_PERMISSIONS.map((permission) => ({
+    name: permissionName(permission),
+    value: botMember.permissions.has(permission) ? "Yes" : "No",
+    inline: true,
+  }));
+  const missing = REQUIRED_BOT_PERMISSIONS.filter((permission) => !botMember.permissions.has(permission));
+
+  await replyEmbed(message, {
+    color: missing.length ? "warning" : "success",
+    title: "Bot Permission Check",
+    description: missing.length
+      ? "Some required Discord permissions are missing for full bot functionality."
+      : "The bot has all required Discord permissions in this server.",
+    fields: [
+      ...fields,
+      {
+        name: "Bot Highest Role",
+        value: botMember.roles.highest.name,
+        inline: false,
+      },
+      {
+        name: "Role Hierarchy Reminder",
+        value: "For `kick`, `ban`, `mute`, and `role`, the bot's highest role must stay above the target member and above any role it should assign.",
+        inline: false,
+      },
+    ],
   });
 }
 
@@ -461,6 +618,15 @@ async function handleBan(message, args) {
     return;
   }
 
+  const permissionCheck = await ensureBotPermissions(
+    message,
+    [PermissionFlagsBits.BanMembers],
+    "`ban`",
+  );
+  if (!permissionCheck.ok) {
+    return;
+  }
+
   const targetRaw = args[0];
   const reason = args.slice(1).join(" ").trim() || "No reason provided";
   if (!targetRaw) {
@@ -475,6 +641,11 @@ async function handleBan(message, args) {
       title: "User Not Found",
       description: "I couldn't find that user in this server.",
     });
+    return;
+  }
+
+  const targetCheck = await ensureActionableTarget(message, member, "ban");
+  if (!targetCheck.ok) {
     return;
   }
 
@@ -509,6 +680,15 @@ async function handleKick(message, args) {
     return;
   }
 
+  const permissionCheck = await ensureBotPermissions(
+    message,
+    [PermissionFlagsBits.KickMembers],
+    "`kick`",
+  );
+  if (!permissionCheck.ok) {
+    return;
+  }
+
   const targetRaw = args[0];
   const reason = args.slice(1).join(" ").trim() || "No reason provided";
   if (!targetRaw) {
@@ -523,6 +703,11 @@ async function handleKick(message, args) {
       title: "User Not Found",
       description: "I couldn't find that user in this server.",
     });
+    return;
+  }
+
+  const targetCheck = await ensureActionableTarget(message, member, "kick");
+  if (!targetCheck.ok) {
     return;
   }
 
@@ -557,6 +742,15 @@ async function handleMute(message, args) {
     return;
   }
 
+  const permissionCheck = await ensureBotPermissions(
+    message,
+    [PermissionFlagsBits.ModerateMembers],
+    "`mute`",
+  );
+  if (!permissionCheck.ok) {
+    return;
+  }
+
   const targetRaw = args[0];
   const durationRaw = args[1];
   const reason = args.slice(2).join(" ").trim() || "No reason provided";
@@ -572,6 +766,11 @@ async function handleMute(message, args) {
       title: "User Not Found",
       description: "I couldn't find that user in this server.",
     });
+    return;
+  }
+
+  const targetCheck = await ensureActionableTarget(message, member, "mute");
+  if (!targetCheck.ok) {
     return;
   }
 
@@ -609,6 +808,15 @@ async function handleRole(message, args) {
     return;
   }
 
+  const permissionCheck = await ensureBotPermissions(
+    message,
+    [PermissionFlagsBits.ManageRoles],
+    "`role`",
+  );
+  if (!permissionCheck.ok) {
+    return;
+  }
+
   const targetRaw = args[0];
   const roleName = args.slice(1).join(" ").trim();
   if (!targetRaw || !roleName) {
@@ -639,6 +847,33 @@ async function handleRole(message, args) {
     return;
   }
 
+  const botMember = await getBotMember(message);
+  if (!member.manageable || role.comparePositionTo(botMember.roles.highest) >= 0) {
+    await replyEmbed(message, {
+      color: "error",
+      title: "Role Hierarchy Issue",
+      description: `The bot cannot add **${role.name}** to **${member.user.tag}**.`,
+      fields: [
+        {
+          name: "Why This Happens",
+          value: "The bot's highest role must be above the target member and above the role being assigned.",
+          inline: false,
+        },
+        {
+          name: "Bot Highest Role",
+          value: botMember.roles.highest.name,
+          inline: true,
+        },
+        {
+          name: "Requested Role",
+          value: role.name,
+          inline: true,
+        },
+      ],
+    });
+    return;
+  }
+
   await member.roles.add(role);
   statements.createModerationAction.run({
     action_type: "role",
@@ -663,6 +898,15 @@ async function handleUnban(message, args) {
     return;
   }
 
+  const permissionCheck = await ensureBotPermissions(
+    message,
+    [PermissionFlagsBits.BanMembers],
+    "`unban`",
+  );
+  if (!permissionCheck.ok) {
+    return;
+  }
+
   const targetRaw = args[0];
   if (!targetRaw) {
     await replyUsage(message, `${config.commandPrefix}unban {user}`);
@@ -684,6 +928,15 @@ async function handleUnmute(message, args) {
     return;
   }
 
+  const permissionCheck = await ensureBotPermissions(
+    message,
+    [PermissionFlagsBits.ModerateMembers],
+    "`unmute`",
+  );
+  if (!permissionCheck.ok) {
+    return;
+  }
+
   const targetRaw = args[0];
   if (!targetRaw) {
     await replyUsage(message, `${config.commandPrefix}unmute {user}`);
@@ -697,6 +950,11 @@ async function handleUnmute(message, args) {
       title: "User Not Found",
       description: "I couldn't find that user in this server.",
     });
+    return;
+  }
+
+  const targetCheck = await ensureActionableTarget(message, member, "unmute");
+  if (!targetCheck.ok) {
     return;
   }
 
@@ -743,6 +1001,13 @@ function createBot() {
 
     try {
       switch (command.toLowerCase()) {
+        case "commands":
+        case "help":
+          await handleCommands(message);
+          break;
+        case "check-perms":
+          await handleCheckPerms(message);
+          break;
         case "prem-gen":
           await handleGenerate(message, args, "premium");
           break;

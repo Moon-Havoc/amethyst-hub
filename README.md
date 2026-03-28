@@ -26,6 +26,8 @@ Luminia Hub is a combined website and Discord bot for issuing access keys, track
 - `!role {user} {role}`
 - `!unban {user}`
 - `!unmute {user}`
+- `!commands`
+- `!check-perms`
 
 Also included:
 
@@ -66,8 +68,11 @@ Also included:
 - The bot uses prefix commands, not slash commands.
 - Staff authorization is based on either `Administrator`, `Manage Server`, or role IDs listed in `ADMIN_ROLE_IDS`.
 - For moderation actions, the bot still needs the matching Discord permissions and a role high enough in the server hierarchy.
+- Required Discord permissions for full functionality are `View Channels`, `Send Messages`, `Embed Links`, `Read Message History`, `Kick Members`, `Ban Members`, `Moderate Members`, and `Manage Roles`.
 - `!mute` accepts values like `30m`, `12h`, or `7d`.
 - `!unban` works best with a user ID.
+- Use `!commands` to show the current command list in Discord.
+- Use `!check-perms` to confirm the bot's server permissions and get a role hierarchy reminder.
 
 ## API
 
