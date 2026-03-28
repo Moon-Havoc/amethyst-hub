@@ -298,12 +298,47 @@ async function handleRevoke(message, args, type) {
       actorId: message.author.id,
       actorTag: message.author.tag,
     });
-    await replyEmbed(message, {
-      color: "warning",
-      title: `${type === "premium" ? "Premium" : "Normal"} Key Revoked`,
-      description: `Revoked for **${member.user.tag}**`,
-      fields: keyFields(updated),
-    });
+
+    try {
+      await sendEmbed(member.user, {
+        color: "warning",
+        title: `${type === "premium" ? "Premium" : "Normal"} Key Revoked`,
+        description: `Your Luminia Hub key for **${updated.roblox_user}** has been revoked.`,
+        fields: keyFields(updated),
+        footerText: `Revoked by ${message.author.tag}`,
+      });
+
+      await replyEmbed(message, {
+        color: "warning",
+        title: `${type === "premium" ? "Premium" : "Normal"} Key Revoked`,
+        description: `The revocation notice for **${member.user.tag}** was sent by DM.`,
+        fields: deliveryFields(updated),
+      });
+    } catch (dmError) {
+      let sentToIssuer = false;
+
+      try {
+        await sendEmbed(message.author, {
+          color: "warning",
+          title: `${type === "premium" ? "Premium" : "Normal"} Revocation Notice Failed`,
+          description: `I couldn't DM **${member.user.tag}**, so I'm sending the revoked key details to you instead.`,
+          fields: keyFields(updated),
+          footerText: "Share this manually only if appropriate.",
+        });
+        sentToIssuer = true;
+      } catch (issuerDmError) {
+        sentToIssuer = false;
+      }
+
+      await replyEmbed(message, {
+        color: "warning",
+        title: "Recipient DMs Closed",
+        description: sentToIssuer
+          ? `I revoked the key for **${member.user.tag}**, but their DMs are closed. I sent the revoked key details to your DMs so you can notify them manually.`
+          : `I revoked the key for **${member.user.tag}**, but their DMs are closed and I couldn't DM you either.`,
+        fields: deliveryFields(updated),
+      });
+    }
   } catch (error) {
     await replyError(message, error);
   }
