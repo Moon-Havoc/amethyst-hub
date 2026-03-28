@@ -413,7 +413,7 @@ function createBot() {
     partials: [Partials.Channel],
   });
 
-  client.once("ready", () => {
+  client.once("clientReady", () => {
     console.log(`Discord bot connected as ${client.user.tag}`);
   });
 
@@ -502,4 +502,3 @@ async function startBot() {
 module.exports = {
   startBot,
 };
-
