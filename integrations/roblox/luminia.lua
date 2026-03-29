@@ -150,10 +150,57 @@ local function setStatus(text, color)
     KeyBox.TextColor3 = color
 end
 
+local function findRequestFunction()
+    return request
+        or http_request
+        or (syn and syn.request)
+        or (http and http.request)
+        or (fluxus and fluxus.request)
+end
+
+local function performValidationRequest(key, username)
+    local validationUrl = API_URL
+        .. "?key="
+        .. HttpService:UrlEncode(key)
+        .. "&robloxUser="
+        .. HttpService:UrlEncode(username)
+
+    local requestFunction = findRequestFunction()
+    if requestFunction then
+        local response = requestFunction({
+            Url = validationUrl,
+            Method = "GET",
+            Headers = {
+                ["Accept"] = "application/json"
+            }
+        })
+
+        if type(response) == "table" then
+            if response.Success == false then
+                error(response.StatusMessage or response.StatusCode or "Request failed")
+            end
+
+            return response.Body or response.body or ""
+        end
+
+        return response
+    end
+
+    if game and game.HttpGet then
+        return game:HttpGet(validationUrl)
+    end
+
+    return HttpService:GetAsync(validationUrl)
+end
+
 GetKeyBtn.MouseButton1Click:Connect(function()
     local keyUrl = SITE_URL .. "/?robloxUser=" .. HttpService:UrlEncode(player.Name)
-    setclipboard(keyUrl)
-    setStatus("KEY LINK COPIED", COLORS.Glow)
+    if setclipboard then
+        setclipboard(keyUrl)
+        setStatus("KEY LINK COPIED", COLORS.Glow)
+    else
+        setStatus("OPEN WEBSITE", COLORS.Glow)
+    end
 end)
 
 VerifyBtn.MouseButton1Click:Connect(function()
@@ -163,19 +210,12 @@ VerifyBtn.MouseButton1Click:Connect(function()
     if key == "" then return end
 
     local success, response = pcall(function()
-        return HttpService:PostAsync(
-            API_URL,
-            HttpService:JSONEncode({
-                key = key,
-                robloxUser = username
-            }),
-            Enum.HttpContentType.ApplicationJson
-        )
+        return performValidationRequest(key, username)
     end)
 
     if not success then
-        warn("Request failed")
-        setStatus("REQUEST FAILED", COLORS.Danger)
+        warn("Request failed:", response)
+        setStatus("HTTP FAILED", COLORS.Danger)
         return
     end
 
