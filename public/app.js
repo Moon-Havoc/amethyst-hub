@@ -1,6 +1,10 @@
 const form = document.getElementById("key-form");
 const result = document.getElementById("result");
 
+function humanExpiry(value) {
+  return value === "never" ? "Never" : new Date(value).toLocaleString();
+}
+
 function renderResult(payload, error = false) {
   result.classList.remove("hidden");
   result.classList.toggle("error", error);
@@ -19,8 +23,15 @@ function renderResult(payload, error = false) {
     <div class="key-value">${payload.key}</div>
     <p>Type: <strong>${payload.type}</strong></p>
     <p>Status: <strong>${payload.status}</strong></p>
-    <p>Expires: <strong>${new Date(payload.expiresAt).toLocaleString()}</strong></p>
+    <p>Expires: <strong>${humanExpiry(payload.expiresAt)}</strong></p>
   `;
+}
+
+const query = new URLSearchParams(window.location.search);
+const robloxUserField = document.getElementById("robloxUser");
+const prefilledRobloxUser = query.get("robloxUser");
+if (prefilledRobloxUser && robloxUserField) {
+  robloxUserField.value = prefilledRobloxUser;
 }
 
 form.addEventListener("submit", async (event) => {
@@ -48,4 +59,3 @@ form.addEventListener("submit", async (event) => {
     renderResult(error.message, true);
   }
 });
-

@@ -110,6 +110,30 @@ function revokeKey({ key, reason, actorId, actorTag }) {
   return statements.findKeyByValue.get(key);
 }
 
+function validateKey({ key, robloxUser }) {
+  runMaintenance();
+
+  const cleanKey = normalizeName(key);
+  const cleanRobloxUser = normalizeName(robloxUser);
+
+  if (!cleanKey || !cleanRobloxUser) {
+    throw new Error("key and robloxUser are required.");
+  }
+
+  const record = statements.findValidKeyForRobloxUser.get(cleanKey, cleanRobloxUser);
+  if (!record) {
+    return {
+      valid: false,
+      reason: "Key is invalid, revoked, expired, or does not belong to this Roblox user.",
+    };
+  }
+
+  return {
+    valid: true,
+    record,
+  };
+}
+
 function resetHwid({ discordUserId, actorId, actorTag }) {
   statements.resetHwid.run(discordUserId);
   logAction({
@@ -139,4 +163,5 @@ module.exports = {
   revokeKey,
   resetHwid,
   setBlacklist,
+  validateKey,
 };

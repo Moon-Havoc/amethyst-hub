@@ -119,6 +119,15 @@ const statements = {
   findKeyByValue: db.prepare(`
     SELECT * FROM keys WHERE key = ?
   `),
+  findValidKeyForRobloxUser: db.prepare(`
+    SELECT *
+    FROM keys
+    WHERE key = ?
+      AND lower(roblox_user) = lower(?)
+      AND status = 'active'
+      AND (expires_at = 'never' OR datetime(expires_at) > datetime('now'))
+    LIMIT 1
+  `),
   revokeKey: db.prepare(`
     UPDATE keys
     SET status = 'revoked', revoked_at = CURRENT_TIMESTAMP, revoked_reason = ?
