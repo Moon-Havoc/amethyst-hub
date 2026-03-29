@@ -65,6 +65,10 @@ db.exec(`
     title TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     description TEXT,
+    cover_image TEXT,
+    place_id TEXT,
+    status_label TEXT NOT NULL DEFAULT 'Working',
+    feature_list TEXT NOT NULL DEFAULT '',
     content TEXT NOT NULL,
     uploaded_by TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,6 +81,18 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_scripts_slug
     ON scripts(slug);
 `);
+
+function ensureColumn(tableName, columnName, definition) {
+  const columns = db.prepare(`PRAGMA table_info(${tableName})`).all();
+  if (!columns.some((column) => column.name === columnName)) {
+    db.exec(`ALTER TABLE ${tableName} ADD COLUMN ${definition}`);
+  }
+}
+
+ensureColumn("scripts", "cover_image", "cover_image TEXT");
+ensureColumn("scripts", "place_id", "place_id TEXT");
+ensureColumn("scripts", "status_label", "status_label TEXT NOT NULL DEFAULT 'Working'");
+ensureColumn("scripts", "feature_list", "feature_list TEXT NOT NULL DEFAULT ''");
 
 // Preserve lifetime premium keys in existing databases without rebuilding the table.
 db.exec(`
@@ -167,7 +183,18 @@ const statements = {
     ORDER BY updated_at DESC
   `),
   listScripts: db.prepare(`
-    SELECT id, title, slug, description, uploaded_by, created_at, updated_at
+    SELECT
+      id,
+      title,
+      slug,
+      description,
+      cover_image,
+      place_id,
+      status_label,
+      feature_list,
+      uploaded_by,
+      created_at,
+      updated_at
     FROM scripts
     ORDER BY datetime(updated_at) DESC, id DESC
   `),
@@ -183,11 +210,39 @@ const statements = {
     LIMIT 1
   `),
   upsertScript: db.prepare(`
-    INSERT INTO scripts (title, slug, description, content, uploaded_by, created_at, updated_at)
-    VALUES (@title, @slug, @description, @content, @uploaded_by, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    INSERT INTO scripts (
+      title,
+      slug,
+      description,
+      cover_image,
+      place_id,
+      status_label,
+      feature_list,
+      content,
+      uploaded_by,
+      created_at,
+      updated_at
+    )
+    VALUES (
+      @title,
+      @slug,
+      @description,
+      @cover_image,
+      @place_id,
+      @status_label,
+      @feature_list,
+      @content,
+      @uploaded_by,
+      CURRENT_TIMESTAMP,
+      CURRENT_TIMESTAMP
+    )
     ON CONFLICT(slug) DO UPDATE SET
       title = excluded.title,
       description = excluded.description,
+      cover_image = excluded.cover_image,
+      place_id = excluded.place_id,
+      status_label = excluded.status_label,
+      feature_list = excluded.feature_list,
       content = excluded.content,
       uploaded_by = excluded.uploaded_by,
       updated_at = CURRENT_TIMESTAMP

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luminia Hub Scripts</title>
+    <meta
+      name="description"
+      content="Browse the Luminia Hub script library, search by place ID, and copy ready-to-run loader strings."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/scripts.css" />
+  </head>
+  <body>
+    <div class="noise-overlay"></div>
+
+    <div class="library-shell">
+      <header class="topbar">
+        <a class="brand" href="/">
+          <span class="brand-mark">L</span>
+          <span>
+            <strong>Luminia Hub</strong>
+            <small>Script library</small>
+          </span>
+        </a>
+
+        <nav class="topnav">
+          <a href="/">Home</a>
+          <a href="#library">Scripts</a>
+          <a href="/admin">Dashboard</a>
+        </nav>
+
+        <div id="service-pill" class="service-pill loading">
+          <span class="pill-dot"></span>
+          <span>Checking service</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">LUMINIA_LIBRARY</p>
+            <h1>SCRIPT LIBRARY</h1>
+            <p class="hero-text">
+              Search live Luminia releases, copy loader strings in one click, and browse cards synced directly with
+              the admin upload panel.
+            </p>
+          </div>
+
+          <label class="search-box">
+            <span>Search scripts</span>
+            <input id="library-search" placeholder="Search title, place ID, status, or features..." />
+          </label>
+        </section>
+
+        <section id="library" class="library-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">LIVE_COLLECTION</p>
+              <h2>Public script shelf</h2>
+            </div>
+            <div class="panel-meta">
+              <span id="script-count">0 scripts</span>
+              <span>Blue access network</span>
+            </div>
+          </div>
+
+          <div id="library-empty" class="empty-state hidden">
+            No scripts have been published yet. Upload a library item from the admin dashboard first.
+          </div>
+
+          <div id="library-grid" class="library-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/scripts.js"></script>
+  </body>
+</html>

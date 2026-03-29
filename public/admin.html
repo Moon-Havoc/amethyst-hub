@@ -13,18 +13,26 @@
     <link rel="stylesheet" href="/admin.css" />
   </head>
   <body>
+    <div class="noise-overlay"></div>
+
     <div class="admin-shell">
       <header class="admin-header">
         <a class="admin-brand" href="/">
           <span class="admin-brand-mark">L</span>
           <span>
             <strong>Luminia Hub</strong>
-            <small>Script control panel</small>
+            <small>Library control</small>
           </span>
         </a>
 
+        <nav class="admin-nav">
+          <a href="/">Home</a>
+          <a href="/scripts">Scripts</a>
+          <span id="admin-api-status" class="status-chip">Checking</span>
+        </nav>
+
         <div class="admin-header-actions">
-          <a class="ghost-button" href="/">Back to Site</a>
+          <a class="ghost-button" href="/scripts">Open Library</a>
           <button id="logout-button" class="ghost-button hidden" type="button">Log Out</button>
         </div>
       </header>
@@ -32,9 +40,10 @@
       <main class="admin-main">
         <section id="admin-login-view" class="admin-card admin-login">
           <p class="eyebrow">Restricted access</p>
-          <h1>Sign in to the Luminia script dashboard.</h1>
+          <h1>Sign in to the Luminia script library panel.</h1>
           <p class="subcopy">
-            Use one of the configured admin accounts to upload, edit, and manage scripts served by the live API.
+            Use one of the configured admin accounts to publish game cards, upload script files, and control the live
+            library your users will browse.
           </p>
 
           <div id="admin-config-warning" class="admin-warning hidden"></div>
@@ -62,12 +71,12 @@
 
         <section id="admin-dashboard-view" class="hidden">
           <section class="admin-hero">
-            <div class="admin-card">
-              <p class="eyebrow">Live dashboard</p>
-              <h1>Upload scripts, publish raw endpoints, and keep your Roblox integration synced.</h1>
+            <div class="admin-card hero-copy-card">
+              <p class="eyebrow">Library builder</p>
+              <h1>Build the public script shelf your users actually want to browse.</h1>
               <p class="subcopy">
-                Every saved script is stored in SQLite and exposed as a raw endpoint you can copy into loaders,
-                executors, or internal tooling.
+                Every upload can now carry art, place IDs, feature tags, live status, and a one-click loader action so
+                the public library feels curated instead of dumped.
               </p>
             </div>
 
@@ -81,40 +90,80 @@
                 <strong id="script-count-label">0</strong>
               </article>
               <article class="metric-card">
-                <span class="metric-label">API status</span>
-                <strong id="admin-api-status">Checking</strong>
+                <span class="metric-label">Public route</span>
+                <strong>/scripts</strong>
               </article>
             </div>
           </section>
 
-          <section class="dashboard-grid">
-            <section class="admin-card">
+          <section class="workspace-grid">
+            <section class="admin-card editor-card">
               <div class="panel-heading">
                 <p class="eyebrow">Upload panel</p>
-                <h2>Create or update a script</h2>
+                <h2>Create or update a library entry</h2>
                 <p class="panel-copy">
-                  Save by slug. If the slug already exists, this will overwrite that script with the new contents.
+                  Save by slug. If the slug already exists, the script card and raw endpoint will update in place.
                 </p>
               </div>
 
               <form id="script-form" class="admin-form">
                 <input id="script-edit-id" type="hidden" />
+
+                <div class="field-grid">
+                  <label>
+                    <span>Script Title</span>
+                    <input id="script-title" name="title" placeholder="Arsenal Rage" required />
+                  </label>
+                  <label>
+                    <span>Script Slug</span>
+                    <input id="script-slug" name="slug" placeholder="arsenal-rage" required />
+                  </label>
+                </div>
+
+                <div class="field-grid">
+                  <label>
+                    <span>Place ID</span>
+                    <input id="script-place-id" name="placeId" placeholder="286090429" />
+                  </label>
+                  <label>
+                    <span>Status Label</span>
+                    <input id="script-status-label" name="statusLabel" placeholder="Working" />
+                  </label>
+                </div>
+
                 <label>
-                  <span>Script Title</span>
-                  <input id="script-title" name="title" placeholder="Luminia Main Loader" required />
+                  <span>Cover Image URL</span>
+                  <input
+                    id="script-cover-image"
+                    name="coverImage"
+                    placeholder="https://images.example.com/arsenal-card.jpg"
+                  />
                 </label>
+
                 <label>
-                  <span>Script Slug</span>
-                  <input id="script-slug" name="slug" placeholder="luminia-main-loader" required />
+                  <span>Feature Tags</span>
+                  <input
+                    id="script-feature-list"
+                    name="featureList"
+                    placeholder="Silent Aim, ESP, Auto Farm"
+                  />
                 </label>
+
                 <label>
                   <span>Description</span>
-                  <input id="script-description" name="description" placeholder="Optional summary for your team" />
+                  <textarea
+                    id="script-description"
+                    name="description"
+                    rows="3"
+                    placeholder="Short library description shown on the card."
+                  ></textarea>
                 </label>
+
                 <label>
                   <span>Load From File</span>
                   <input id="script-file" type="file" accept=".lua,.txt,.luau,.json,.js,.ts,.md" />
                 </label>
+
                 <label>
                   <span>Script Content</span>
                   <textarea
@@ -135,21 +184,45 @@
               <div id="script-feedback" class="admin-feedback hidden"></div>
             </section>
 
-            <section class="admin-card">
+            <aside class="admin-side-column">
+              <section class="admin-card preview-card-shell">
+                <div class="panel-heading">
+                  <p class="eyebrow">Live preview</p>
+                  <h2>How this card will look</h2>
+                </div>
+                <div id="script-preview" class="script-preview"></div>
+              </section>
+
+              <section class="admin-card helper-card">
+                <p class="eyebrow">Distribution note</p>
+                <h2>Loader-ready output</h2>
+                <p class="panel-copy">
+                  Every saved script automatically gets a raw route and a generated loadstring copy action in both the
+                  dashboard and the public library.
+                </p>
+              </section>
+            </aside>
+          </section>
+
+          <section class="admin-card library-shell">
+            <div class="library-head">
               <div class="panel-heading">
                 <p class="eyebrow">Published scripts</p>
-                <h2>Versioned raw links</h2>
-                <p class="panel-copy">
-                  Copy the raw URL or load a saved script back into the editor when you need to revise it.
-                </p>
+                <h2>Library cards</h2>
+                <p class="panel-copy">Search, edit, delete, or copy loader links from the live library inventory.</p>
               </div>
 
-              <div id="script-empty-state" class="empty-state hidden">
-                No scripts uploaded yet. Save your first script to create a raw endpoint.
-              </div>
+              <label class="search-field">
+                <span>Search library</span>
+                <input id="script-search" placeholder="Search title, place ID, status, or feature tag..." />
+              </label>
+            </div>
 
-              <div id="script-list" class="script-list"></div>
-            </section>
+            <div id="script-empty-state" class="empty-state hidden">
+              No scripts uploaded yet. Save your first script to create a public library card.
+            </div>
+
+            <div id="script-list" class="script-library-grid"></div>
           </section>
         </section>
       </main>
@@ -157,4 +230,4 @@
 
     <script src="/admin.js"></script>
   </body>
-  </html>
+</html>

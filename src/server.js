@@ -26,10 +26,25 @@ function slugify(value) {
     .slice(0, 80);
 }
 
+function normalizeFeatureList(value) {
+  return String(value || "")
+    .split(/[\n,|]+/g)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 8)
+    .join(", ");
+}
+
 function sanitizeScriptInput(payload) {
   const title = String(payload.title || "").trim();
   const slug = slugify(payload.slug || payload.title);
   const description = String(payload.description || "").trim();
+  const coverImage = String(payload.coverImage || payload.cover_image || "").trim();
+  const placeId = String(payload.placeId || payload.place_id || "").trim();
+  const statusLabel = String(payload.statusLabel || payload.status_label || "Working").trim();
+  const featureList = normalizeFeatureList(
+    payload.featureList || payload.feature_list || payload.features,
+  );
   const content = String(payload.content || "");
 
   if (!title) {
@@ -48,6 +63,10 @@ function sanitizeScriptInput(payload) {
     title,
     slug,
     description,
+    cover_image: coverImage.slice(0, 500),
+    place_id: placeId.slice(0, 120),
+    status_label: (statusLabel || "Working").slice(0, 40),
+    feature_list: featureList,
     content,
   };
 }
@@ -177,6 +196,13 @@ app.get("/api/admin/scripts", requireAdminApi, (req, res) => {
   });
 });
 
+app.get("/api/scripts", (req, res) => {
+  return res.json({
+    ok: true,
+    scripts: statements.listScripts.all(),
+  });
+});
+
 app.post("/api/admin/scripts", requireAdminApi, (req, res) => {
   try {
     const script = sanitizeScriptInput(req.body || {});
@@ -230,6 +256,10 @@ app.get("/api/keys/status", (req, res) => {
 
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(config.rootDir, "public", "admin.html"));
+});
+
+app.get("/scripts", (req, res) => {
+  res.sendFile(path.join(config.rootDir, "public", "scripts.html"));
 });
 
 app.use((req, res) => {

@@ -6,7 +6,8 @@ Luminia Hub is a combined website and Discord bot for issuing access keys, track
 
 - Public website for generating normal user keys
 - Dark landing page with a public access portal and service status
-- Admin dashboard for script uploads and raw script links
+- Public script library with searchable game cards and one-click loader copies
+- Admin dashboard for script uploads, library metadata, and raw script links
 - SQLite database for keys, users, blacklists, and moderation history
 - Discord bot with the required `!` commands
 - 24-hour expiry for normal keys
@@ -66,7 +67,8 @@ Also included:
    ```
 
 5. Open the site at `http://localhost:3000`
-6. Open the admin panel at `http://localhost:3000/admin`
+6. Open the public script library at `http://localhost:3000/scripts`
+7. Open the admin panel at `http://localhost:3000/admin`
 
 ## Discord bot notes
 
@@ -89,7 +91,9 @@ Also included:
 
 - Visit `/admin` to sign in and manage uploadable scripts.
 - Admin accounts come from `ADMIN_USERS`, which is a comma-separated list of `username:password` pairs.
+- Library entries support title, slug, place ID, status label, cover image URL, feature tags, description, and script content.
 - Saved scripts are exposed as raw URLs at `/api/scripts/{slug}/raw`.
+- The public `/scripts` page lets users search the library and copy a ready-to-run loadstring for each script.
 - Script uploads are stored in the same SQLite database as the rest of the platform, so use persistent storage in production.
 
 ## API
@@ -123,6 +127,10 @@ Returns every uploaded script for an authenticated admin session.
 ### `POST /api/admin/scripts`
 
 Creates or updates a script by slug for an authenticated admin session.
+
+### `GET /api/scripts`
+
+Returns the public script library metadata used by the `/scripts` page.
 
 ### `GET /api/scripts/{slug}/raw`
 
