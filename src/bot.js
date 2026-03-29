@@ -7,6 +7,7 @@ const {
 } = require("discord.js");
 const config = require("./config");
 const { statements } = require("./db");
+const { setBotClient } = require("./discord-admin");
 const { createOrReuseKey, revokeKey, resetHwid, setBlacklist } = require("./key-service");
 const { isBotAdmin } = require("./permissions");
 
@@ -1073,10 +1074,12 @@ async function startBot() {
   const client = createBot();
   if (!client) {
     console.log("DISCORD_TOKEN not set, skipping Discord bot startup.");
+    setBotClient(null);
     return null;
   }
 
   await client.login(config.discordToken);
+  setBotClient(client);
   return client;
 }
 

@@ -260,6 +260,62 @@
 
                 <div id="revoke-key-feedback" class="admin-feedback hidden"></div>
               </section>
+
+              <section class="quick-panel">
+                <div class="panel-heading">
+                  <p class="eyebrow">Discord moderation</p>
+                  <h3>Run live server actions</h3>
+                  <p class="panel-copy">
+                    These actions go through the connected Discord bot, so the bot must be online and above the target.
+                  </p>
+                </div>
+
+                <form id="discord-action-form" class="admin-form compact-form">
+                  <div class="field-grid">
+                    <label>
+                      <span>Action</span>
+                      <select id="discord-action-select">
+                        <option value="ban">Ban</option>
+                        <option value="kick">Kick</option>
+                        <option value="mute">Mute</option>
+                        <option value="unmute">Unmute</option>
+                        <option value="role">Add Role</option>
+                        <option value="unban">Unban</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>User ID or Mention</span>
+                      <input id="discord-action-target" placeholder="123456789012345678" required />
+                    </label>
+                  </div>
+
+                  <div class="field-grid">
+                    <label>
+                      <span>Duration</span>
+                      <input id="discord-action-duration" placeholder="10m (mute only)" />
+                    </label>
+                    <label>
+                      <span>Role Name or ID</span>
+                      <input id="discord-action-role" placeholder="Premium" />
+                    </label>
+                  </div>
+
+                  <label>
+                    <span>Reason</span>
+                    <textarea
+                      id="discord-action-reason"
+                      rows="3"
+                      placeholder="Reason shown in moderation history"
+                    ></textarea>
+                  </label>
+
+                  <div class="admin-form-actions">
+                    <button id="discord-action-button" type="submit">Run Discord Action</button>
+                  </div>
+                </form>
+
+                <div id="discord-action-feedback" class="admin-feedback hidden"></div>
+              </section>
             </div>
           </section>
 

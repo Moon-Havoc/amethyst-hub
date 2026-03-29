@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const config = require("./config");
 const { statements, runMaintenance } = require("./db");
+const { performDiscordAdminAction } = require("./discord-admin");
 const { createOrReuseKey, revokeKey, resetHwid, setBlacklist, validateKey } = require("./key-service");
 const {
   authenticateAdmin,
@@ -433,6 +434,31 @@ app.post("/api/admin/users/reset-hwid", requireAdminApi, (req, res) => {
 
     return res.json({
       ok: true,
+      dashboard: getDashboardPayload(),
+    });
+  } catch (error) {
+    return res.status(400).json({
+      ok: false,
+      error: error.message,
+    });
+  }
+});
+
+app.post("/api/admin/discord/action", requireAdminApi, async (req, res) => {
+  try {
+    const result = await performDiscordAdminAction({
+      action: req.body?.action,
+      target: req.body?.target,
+      reason: req.body?.reason,
+      duration: req.body?.duration,
+      roleQuery: req.body?.roleQuery,
+      actorId: req.adminUser,
+      actorTag: adminActorTag(req.adminUser),
+    });
+
+    return res.json({
+      ok: true,
+      result,
       dashboard: getDashboardPayload(),
     });
   } catch (error) {

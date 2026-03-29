@@ -40,6 +40,15 @@ const revokeReasonInput = document.getElementById("revoke-reason-input");
 const revokeKeyButton = document.getElementById("revoke-key-button");
 const revokeKeyFeedback = document.getElementById("revoke-key-feedback");
 
+const discordActionForm = document.getElementById("discord-action-form");
+const discordActionSelect = document.getElementById("discord-action-select");
+const discordActionTarget = document.getElementById("discord-action-target");
+const discordActionDuration = document.getElementById("discord-action-duration");
+const discordActionRole = document.getElementById("discord-action-role");
+const discordActionReason = document.getElementById("discord-action-reason");
+const discordActionButton = document.getElementById("discord-action-button");
+const discordActionFeedback = document.getElementById("discord-action-feedback");
+
 const scriptForm = document.getElementById("script-form");
 const scriptEditId = document.getElementById("script-edit-id");
 const scriptTitle = document.getElementById("script-title");
@@ -383,6 +392,43 @@ function createActionButton(label, dataset, tone = "ghost") {
 
 function createMetaText(items) {
   return items.filter(Boolean).join(" • ");
+}
+
+function formatDiscordActionResult(result) {
+  switch (result.action) {
+    case "ban":
+      return `Banned ${result.targetTag}.`;
+    case "kick":
+      return `Kicked ${result.targetTag}.`;
+    case "mute":
+      return `Muted ${result.targetTag} for ${result.duration}.`;
+    case "unmute":
+      return `Removed timeout for ${result.targetTag}.`;
+    case "role":
+      return `Added ${result.roleName} to ${result.targetTag}.`;
+    case "unban":
+      return `Unbanned ${result.targetTag}.`;
+    default:
+      return "Discord action completed.";
+  }
+}
+
+function updateDiscordActionFieldHints() {
+  const action = discordActionSelect.value;
+  const needsDuration = action === "mute";
+  const needsRole = action === "role";
+
+  discordActionDuration.disabled = !needsDuration;
+  discordActionDuration.placeholder = needsDuration ? "10m" : "Only used for mute";
+  if (!needsDuration) {
+    discordActionDuration.value = "";
+  }
+
+  discordActionRole.disabled = !needsRole;
+  discordActionRole.placeholder = needsRole ? "Premium" : "Only used for Add Role";
+  if (!needsRole) {
+    discordActionRole.value = "";
+  }
 }
 
 function createEmptyState(message) {
@@ -780,6 +826,7 @@ function prefillUserForms(userId) {
   userDiscordTag.value = record.discord_tag || "";
   userRobloxUser.value = record.roblox_user || "";
   userBlacklistReason.value = record.blacklist_reason || "";
+  discordActionTarget.value = record.discord_user_id || record.discord_tag || "";
 }
 
 async function runUserAction(action) {
@@ -955,6 +1002,35 @@ revokeKeyForm.addEventListener("submit", async (event) => {
   }
 });
 
+discordActionForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  clearFeedback(discordActionFeedback);
+
+  const body = {
+    action: discordActionSelect.value,
+    target: discordActionTarget.value.trim(),
+    duration: discordActionDuration.value.trim(),
+    roleQuery: discordActionRole.value.trim(),
+    reason: discordActionReason.value.trim(),
+  };
+
+  try {
+    setBusy(discordActionButton, true, "Running...");
+
+    const payload = await requestJson("/api/admin/discord/action", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+
+    applyDashboard(payload.dashboard);
+    setFeedback(discordActionFeedback, formatDiscordActionResult(payload.result), "success");
+  } catch (error) {
+    setFeedback(discordActionFeedback, error.message, "error");
+  } finally {
+    setBusy(discordActionButton, false, discordActionButton.dataset.idleLabel);
+  }
+});
+
 scriptTitle.addEventListener("input", () => {
   if (!slugEditedManually) {
     scriptSlug.value = slugify(scriptTitle.value);
@@ -997,6 +1073,7 @@ scriptSearch.addEventListener("input", renderScripts);
 keySearch.addEventListener("input", renderKeys);
 userSearch.addEventListener("input", renderUsers);
 auditSearch.addEventListener("input", renderAuditLogs);
+discordActionSelect.addEventListener("change", updateDiscordActionFieldHints);
 
 scriptResetButton.addEventListener("click", () => {
   resetScriptForm();
@@ -1118,3 +1195,4 @@ userList.addEventListener("click", async (event) => {
 });
 
 bootstrap();
+updateDiscordActionFieldHints();
