@@ -4,79 +4,281 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Luminia Hub</title>
+    <meta
+      name="description"
+      content="Luminia Hub is the access portal for key generation, premium delivery, and Discord-powered moderation."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="background-orb orb-a"></div>
-    <div class="background-orb orb-b"></div>
-    <main class="page-shell">
-      <section class="hero-card">
-        <p class="eyebrow">Luminia Hub Access Portal</p>
-        <h1>Generate a fresh 24-hour key for your platform users.</h1>
-        <p class="hero-copy">
-          Users can request a normal key from the website, and your Discord staff can issue premium keys or handle moderation directly inside the server.
-        </p>
-        <div class="feature-row">
-          <div class="feature-pill">Format: <strong>LUM_15Characters</strong></div>
-          <div class="feature-pill">Normal keys expire after 24 hours</div>
-          <div class="feature-pill">Bot-powered staff controls</div>
+    <div class="page-noise"></div>
+    <div class="gradient-sphere sphere-left"></div>
+    <div class="gradient-sphere sphere-right"></div>
+
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand-lockup" href="/">
+          <span class="brand-mark">L</span>
+          <span class="brand-copy">
+            <strong>Luminia Hub</strong>
+            <span>Access control for keys, premium, and moderation</span>
+          </span>
+        </a>
+
+        <div class="header-actions">
+          <a class="link-button" href="#generate">Generate Key</a>
+          <a class="link-button muted" href="#commands">View Commands</a>
+          <div id="service-pill" class="service-pill loading">
+            <span class="pill-dot"></span>
+            <span>Checking service</span>
+          </div>
         </div>
-      </section>
+      </header>
 
-      <section class="panel-grid">
-        <section class="panel">
-          <div class="panel-heading">
-            <p class="panel-kicker">Website</p>
-            <h2>Generate or renew a normal key</h2>
+      <main>
+        <section class="hero-grid">
+          <div class="hero-copy-panel reveal">
+            <p class="eyebrow">Live access portal</p>
+            <h1>Issue keys fast, verify them in Roblox, and manage your server from one hub.</h1>
+            <p class="hero-copy">
+              Luminia Hub ties together the public key portal, the Railway-hosted API, and your Discord bot so
+              players can generate access, staff can issue premium keys, and your GUI can validate everything in real
+              time.
+            </p>
+
+            <div class="hero-actions">
+              <a class="primary-button" href="#generate">Open Access Panel</a>
+              <a class="secondary-button" href="#flow">See The Flow</a>
+            </div>
+
+            <div class="stat-grid">
+              <article class="stat-card">
+                <span class="stat-value">24h</span>
+                <span class="stat-label">Normal keys auto-expire after one day</span>
+              </article>
+              <article class="stat-card">
+                <span class="stat-value">Never</span>
+                <span class="stat-label">Premium keys are issued as lifetime access</span>
+              </article>
+              <article class="stat-card">
+                <span class="stat-value">DM</span>
+                <span class="stat-label">Discord delivers sensitive keys privately</span>
+              </article>
+            </div>
           </div>
-          <form id="key-form" class="form-grid">
-            <label>
-              <span>Discord User ID</span>
-              <input id="discordUserId" name="discordUserId" placeholder="123456789012345678" required />
-            </label>
-            <label>
-              <span>Discord Tag or Username</span>
-              <input id="discordTag" name="discordTag" placeholder="user#0001 or user" required />
-            </label>
-            <label>
-              <span>Roblox Username</span>
-              <input id="robloxUser" name="robloxUser" placeholder="RobloxUsername" required />
-            </label>
-            <button type="submit">Generate Key</button>
-          </form>
-          <div id="result" class="result-card hidden"></div>
+
+          <section class="hero-console reveal delayed">
+            <div class="console-window">
+              <div class="console-header">
+                <span class="window-dot red"></span>
+                <span class="window-dot amber"></span>
+                <span class="window-dot green"></span>
+                <span class="window-label">Luminia live stack</span>
+              </div>
+
+              <div class="console-grid">
+                <div class="console-card">
+                  <p class="console-kicker">Website</p>
+                  <h2>Key portal</h2>
+                  <p>Players request or renew normal keys directly from the web panel.</p>
+                </div>
+                <div class="console-card accent">
+                  <p class="console-kicker">Discord</p>
+                  <h2>Staff controls</h2>
+                  <p>Admins create premium access, revoke keys, and run moderation commands from chat.</p>
+                </div>
+                <div class="console-card">
+                  <p class="console-kicker">Roblox</p>
+                  <h2>Live validation</h2>
+                  <p>The GUI verifies the key and matching Roblox username against the deployed API.</p>
+                </div>
+              </div>
+
+              <div class="stack-trace">
+                <div class="trace-line">
+                  <span class="trace-label">Format</span>
+                  <strong>LUM_15Characters</strong>
+                </div>
+                <div class="trace-line">
+                  <span class="trace-label">Premium</span>
+                  <strong>Lifetime access</strong>
+                </div>
+                <div class="trace-line">
+                  <span class="trace-label">Validation</span>
+                  <strong>Key + Roblox username must match</strong>
+                </div>
+              </div>
+            </div>
+          </section>
         </section>
 
-        <section class="panel">
-          <div class="panel-heading">
-            <p class="panel-kicker">Discord Bot</p>
-            <h2>Built-in commands</h2>
-          </div>
-          <div class="command-list">
-            <code>!prem-gen {user} {robloxuser}</code>
-            <code>!gen-key {user} {robloxuser}</code>
-            <code>!reset_hwid</code>
-            <code>!revoke_key {user} {key}</code>
-            <code>!revoke_prem {user} {key}</code>
-            <code>!blacklists {user}</code>
-            <code>!unblacklist {user}</code>
-            <code>!ban {user} {reason}</code>
-            <code>!kick {user} {reason}</code>
-            <code>!mute {user} {duration} {reason}</code>
-            <code>!role {user} {role}</code>
-            <code>!unban {user}</code>
-            <code>!unmute {user}</code>
+        <section id="flow" class="flow-strip reveal delayed-more">
+          <article class="flow-card">
+            <span class="flow-step">01</span>
+            <h3>Open the key link</h3>
+            <p>The Roblox GUI copies a website link with the player username already prefilled.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">02</span>
+            <h3>Generate or renew</h3>
+            <p>Players request a normal key here, while staff can issue premium keys from Discord.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">03</span>
+            <h3>Paste into Roblox</h3>
+            <p>The player enters the key inside the in-game GUI and sends it to the API for verification.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">04</span>
+            <h3>Grant access</h3>
+            <p>If the key is active and belongs to that Roblox username, the GUI unlocks the script.</p>
+          </article>
+        </section>
+
+        <section class="workspace-grid">
+          <section id="generate" class="panel generator-panel reveal">
+            <div class="panel-heading">
+              <p class="panel-kicker">Access panel</p>
+              <h2>Generate a normal key</h2>
+              <p>
+                Normal keys are reused while still active and renew automatically once they expire. Premium access is
+                handled by staff in Discord.
+              </p>
+            </div>
+
+            <div id="prefill-banner" class="prefill-banner hidden">
+              <span class="prefill-tag">Detected from Roblox GUI</span>
+              <span id="prefill-copy"></span>
+            </div>
+
+            <form id="key-form" class="form-grid">
+              <label>
+                <span>Discord User ID</span>
+                <input id="discordUserId" name="discordUserId" placeholder="123456789012345678" required />
+              </label>
+              <label>
+                <span>Discord Tag or Username</span>
+                <input id="discordTag" name="discordTag" placeholder="user#0001 or user" required />
+              </label>
+              <label>
+                <span>Roblox Username</span>
+                <input id="robloxUser" name="robloxUser" placeholder="RobloxUsername" required />
+              </label>
+
+              <div class="form-actions">
+                <button id="generate-button" type="submit">Generate Key</button>
+                <p class="form-note">The generated key will follow the `LUM_15Characters` format.</p>
+              </div>
+            </form>
+
+            <div id="result" class="result-card hidden"></div>
+          </section>
+
+          <div class="side-stack">
+            <section class="panel info-panel reveal delayed">
+              <div class="panel-heading">
+                <p class="panel-kicker">Access rules</p>
+                <h2>What the backend checks</h2>
+              </div>
+
+              <div class="info-list">
+                <article class="info-row">
+                  <span class="info-badge">Normal</span>
+                  <div>
+                    <h3>24-hour renewal cycle</h3>
+                    <p>Normal keys expire after one day and can be regenerated from the portal.</p>
+                  </div>
+                </article>
+                <article class="info-row">
+                  <span class="info-badge premium">Premium</span>
+                  <div>
+                    <h3>Lifetime access</h3>
+                    <p>Premium keys issued with `!prem-gen` never expire and are delivered through Discord.</p>
+                  </div>
+                </article>
+                <article class="info-row">
+                  <span class="info-badge locked">Verify</span>
+                  <div>
+                    <h3>Username-bound validation</h3>
+                    <p>The Roblox GUI only passes if the submitted key belongs to that exact Roblox username.</p>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel notes-panel reveal delayed-more">
+              <div class="panel-heading">
+                <p class="panel-kicker">Launch notes</p>
+                <h2>Before you ship</h2>
+              </div>
+
+              <div class="note-grid">
+                <article class="note-card">
+                  <h3>Discord first</h3>
+                  <p>Staff should use Discord for premium generation, revokes, bans, kicks, and moderation actions.</p>
+                </article>
+                <article class="note-card">
+                  <h3>Website second</h3>
+                  <p>This page is the self-serve normal key portal for users who only need a standard 24-hour key.</p>
+                </article>
+                <article class="note-card wide">
+                  <h3>Roblox integration</h3>
+                  <p>
+                    The in-game GUI points at the live Railway deployment and copies the site link with the player
+                    name prefilled for a smoother request flow.
+                  </p>
+                </article>
+              </div>
+            </section>
           </div>
         </section>
-      </section>
-    </main>
+
+        <section id="commands" class="panel command-section reveal">
+          <div class="panel-heading">
+            <p class="panel-kicker">Discord ops</p>
+            <h2>Command surface</h2>
+            <p>The bot handles key access, blacklists, moderation, and role management in one command set.</p>
+          </div>
+
+          <div class="command-columns">
+            <article class="command-cluster">
+              <h3>Key issuing</h3>
+              <code>!gen-key {user} {robloxuser}</code>
+              <code>!prem-gen {user} {robloxuser}</code>
+              <code>!revoke_key {user} {key}</code>
+              <code>!revoke_prem {user} {key}</code>
+              <code>!reset_hwid</code>
+            </article>
+
+            <article class="command-cluster">
+              <h3>Trust & blacklist</h3>
+              <code>!blacklist {user} {reason}</code>
+              <code>!blacklists</code>
+              <code>!unblacklist {user}</code>
+              <code>!commands</code>
+              <code>!check-perms</code>
+            </article>
+
+            <article class="command-cluster">
+              <h3>Moderation</h3>
+              <code>!ban {user} {reason}</code>
+              <code>!kick {user} {reason}</code>
+              <code>!mute {user} {duration} {reason}</code>
+              <code>!unban {user}</code>
+              <code>!unmute {user}</code>
+              <code>!role {user} {role}</code>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
     <script src="/app.js"></script>
   </body>
   </html>
-
