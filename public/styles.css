@@ -237,6 +237,43 @@ button {
   min-height: 66vh;
 }
 
+.hero-brand-panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.15rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(143, 202, 255, 0.12);
+  background: rgba(8, 13, 22, 0.76);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+}
+
+.hero-brand-logo {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 1rem;
+  object-fit: cover;
+  box-shadow: 0 0 22px rgba(110, 169, 255, 0.18);
+}
+
+.hero-brand-panel strong,
+.hero-brand-panel span {
+  display: block;
+}
+
+.hero-brand-panel strong {
+  font-family: "Oxanium", sans-serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.14em;
+}
+
+.hero-brand-panel span {
+  margin-top: 0.18rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
 .eyebrow {
   margin: 0 0 1rem;
   color: var(--accent-soft);
@@ -363,6 +400,19 @@ button:hover {
   animation: terminalFloat 6.4s ease-in-out infinite;
 }
 
+.terminal-watermark {
+  position: absolute;
+  right: -1.6rem;
+  bottom: -1.5rem;
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+  opacity: 0.08;
+  filter: saturate(1.2);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .terminal-window::after {
   content: "";
   position: absolute;
@@ -374,6 +424,8 @@ button:hover {
 }
 
 .terminal-topbar {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -393,6 +445,8 @@ button:hover {
 }
 
 .terminal-body {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 0.35rem;
   min-height: 19rem;
@@ -884,6 +938,10 @@ button:disabled {
 
   .hero-copy h1 {
     font-size: clamp(2.7rem, 14vw, 4.2rem);
+  }
+
+  .hero-brand-panel {
+    width: fit-content;
   }
 
   .feature-card,
