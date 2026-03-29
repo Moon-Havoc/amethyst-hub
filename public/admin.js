@@ -15,6 +15,8 @@ const activeModerationLabel = document.getElementById("active-moderation-label")
 const auditCountLabel = document.getElementById("audit-count-label");
 const adminApiStatus = document.getElementById("admin-api-status");
 const dashboardRefreshButton = document.getElementById("dashboard-refresh-button");
+const dashboardTabs = Array.from(document.querySelectorAll("[data-dashboard-tab]"));
+const dashboardPanels = Array.from(document.querySelectorAll("[data-dashboard-panel]"));
 
 const issueKeyForm = document.getElementById("issue-key-form");
 const issueDiscordId = document.getElementById("issue-discord-id");
@@ -86,6 +88,7 @@ const state = {
 };
 
 let slugEditedManually = false;
+let activeDashboardPanel = "overview";
 
 function setFeedback(node, message, type) {
   node.textContent = message;
@@ -163,6 +166,7 @@ function showDashboard(username) {
   dashboardView.classList.remove("hidden");
   logoutButton.classList.remove("hidden");
   adminUserLabel.textContent = username;
+  switchDashboardPanel(activeDashboardPanel);
 }
 
 async function requestJson(url, options = {}) {
@@ -436,6 +440,25 @@ function createEmptyState(message) {
   empty.className = "empty-state";
   empty.textContent = message;
   return empty;
+}
+
+function switchDashboardPanel(name) {
+  activeDashboardPanel = name;
+
+  dashboardTabs.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.dashboardTab === name);
+  });
+
+  dashboardPanels.forEach((panel) => {
+    const isActive = panel.dataset.dashboardPanel === name;
+    panel.classList.toggle("is-active", isActive);
+
+    if (isActive) {
+      panel.querySelectorAll("[data-reveal]").forEach((node, index) => {
+        window.LuminiaSite?.observeReveal(node, index * 35);
+      });
+    }
+  });
 }
 
 function createDataCard({ title, summary, meta, pills = [], actions = [] }) {
@@ -938,6 +961,12 @@ dashboardRefreshButton?.addEventListener("click", async () => {
   } finally {
     setBusy(dashboardRefreshButton, false, dashboardRefreshButton.dataset.idleLabel);
   }
+});
+
+dashboardTabs.forEach((button) => {
+  button.addEventListener("click", () => {
+    switchDashboardPanel(button.dataset.dashboardTab);
+  });
 });
 
 issueKeyForm.addEventListener("submit", async (event) => {

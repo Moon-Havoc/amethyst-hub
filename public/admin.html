@@ -23,7 +23,7 @@
           <img class="admin-brand-mark" src="/assets/luminia-logo.png" alt="Luminia Hub logo" />
           <span>
             <strong>Luminia Hub</strong>
-            <small>Library control</small>
+            <small>Control room</small>
           </span>
         </a>
 
@@ -49,15 +49,12 @@
             <img class="admin-hero-logo" src="/assets/luminia-logo.png" alt="Luminia Hub logo" />
             <div>
               <strong>LUMINIA HUB</strong>
-              <span>Admin script control</span>
+              <span>Admin dashboard</span>
             </div>
           </div>
           <p class="eyebrow">Restricted access</p>
-          <h1>Sign in to the Luminia script library panel.</h1>
-          <p class="subcopy">
-            Use one of the configured admin accounts to publish game cards, upload script files, and control the live
-            library your users will browse.
-          </p>
+          <h1>Sign in to Luminia Admin.</h1>
+          <p class="subcopy">Use an approved account to manage keys, users, scripts, and live Discord actions.</p>
 
           <div id="admin-config-warning" class="admin-warning hidden"></div>
 
@@ -83,73 +80,78 @@
         </section>
 
         <section id="admin-dashboard-view" class="hidden">
-          <section class="admin-hero">
-            <div class="admin-card hero-copy-card" data-reveal>
-              <div class="admin-brand-panel compact">
-                <img class="admin-hero-logo" src="/assets/luminia-logo.png" alt="Luminia Hub logo" />
-                <div>
-                  <strong>LUMINIA HUB</strong>
-                  <span>Operations dashboard</span>
+          <nav class="admin-card dashboard-switcher" data-reveal>
+            <button class="dashboard-tab is-active" type="button" data-dashboard-tab="overview">Overview</button>
+            <button class="dashboard-tab" type="button" data-dashboard-tab="operations">Operations</button>
+            <button class="dashboard-tab" type="button" data-dashboard-tab="inventory">Inventory</button>
+            <button class="dashboard-tab" type="button" data-dashboard-tab="activity">Activity</button>
+            <button class="dashboard-tab" type="button" data-dashboard-tab="scripts">Scripts</button>
+            <button id="dashboard-refresh-button" class="ghost-button" type="button">Refresh</button>
+          </nav>
+
+          <div class="dashboard-panel is-active" data-dashboard-panel="overview">
+            <section class="admin-hero">
+              <div class="admin-card hero-copy-card" data-reveal>
+                <div class="admin-brand-panel compact">
+                  <img class="admin-hero-logo" src="/assets/luminia-logo.png" alt="Luminia Hub logo" />
+                  <div>
+                    <strong>LUMINIA HUB</strong>
+                    <span>Operations dashboard</span>
+                  </div>
+                </div>
+                <p class="eyebrow">Control room</p>
+                <h1>Manage the full Luminia stack from one dashboard.</h1>
+                <p class="subcopy">Keys, users, scripts, and Discord actions are all live here.</p>
+              </div>
+
+              <div class="metric-grid">
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Signed in</span>
+                  <strong id="admin-user-label">-</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Scripts</span>
+                  <strong id="script-count-label">0</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Active keys</span>
+                  <strong id="active-key-label">0</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Premium keys</span>
+                  <strong id="premium-key-label">0</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Users</span>
+                  <strong id="total-user-label">0</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Blacklisted</span>
+                  <strong id="blacklisted-user-label">0</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Active actions</span>
+                  <strong id="active-moderation-label">0</strong>
+                </article>
+                <article class="metric-card" data-reveal>
+                  <span class="metric-label">Recent logs</span>
+                  <strong id="audit-count-label">0</strong>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <div class="dashboard-panel" data-dashboard-panel="operations">
+            <section class="admin-card control-shell" id="operations" data-reveal>
+              <div class="library-head">
+                <div class="panel-heading">
+                  <p class="eyebrow">Operations</p>
+                  <h2>Run live admin actions</h2>
+                  <p class="panel-copy">Issue keys, manage blacklist state, and trigger live Discord actions.</p>
                 </div>
               </div>
-              <p class="eyebrow">Control room</p>
-              <h1>Run keys, users, scripts, and activity from one Luminia dashboard.</h1>
-              <p class="subcopy">
-                This panel now ties together the live key system, user records, blacklist flow, audit trail, and
-                script library so you can manage the whole Luminia stack without hopping between pages.
-              </p>
-            </div>
 
-            <div class="metric-grid">
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Signed in</span>
-                <strong id="admin-user-label">-</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Scripts</span>
-                <strong id="script-count-label">0</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Active keys</span>
-                <strong id="active-key-label">0</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Premium keys</span>
-                <strong id="premium-key-label">0</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Users</span>
-                <strong id="total-user-label">0</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Blacklisted</span>
-                <strong id="blacklisted-user-label">0</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Active actions</span>
-                <strong id="active-moderation-label">0</strong>
-              </article>
-              <article class="metric-card" data-reveal>
-                <span class="metric-label">Recent logs</span>
-                <strong id="audit-count-label">0</strong>
-              </article>
-            </div>
-          </section>
-
-          <section class="admin-card control-shell" id="operations" data-reveal>
-            <div class="library-head">
-              <div class="panel-heading">
-                <p class="eyebrow">Operations</p>
-                <h2>Run live admin actions</h2>
-                <p class="panel-copy">
-                  Issue keys, revoke access, reset HWIDs, and manage blacklist state directly from the website.
-                </p>
-              </div>
-
-              <button id="dashboard-refresh-button" class="ghost-button" type="button">Refresh Live Data</button>
-            </div>
-
-            <div class="ops-grid">
+              <div class="ops-grid">
               <section class="quick-panel">
                 <div class="panel-heading">
                   <p class="eyebrow">Key issuance</p>
@@ -316,204 +318,206 @@
 
                 <div id="discord-action-feedback" class="admin-feedback hidden"></div>
               </section>
-            </div>
-          </section>
-
-          <section class="inventory-grid" id="inventory">
-            <section class="admin-card inventory-card" data-reveal>
-              <div class="library-head">
-                <div class="panel-heading">
-                  <p class="eyebrow">Inventory</p>
-                  <h2>Key ledger</h2>
-                  <p class="panel-copy">Search issued, active, premium, revoked, and expired keys.</p>
-                </div>
-
-                <label class="search-field">
-                  <span>Search keys</span>
-                  <input id="key-search" placeholder="Search key, Roblox user, Discord ID, type, or status..." />
-                </label>
               </div>
-
-              <div id="key-list" class="data-stack"></div>
             </section>
+          </div>
 
-            <section class="admin-card inventory-card" data-reveal>
-              <div class="library-head">
-                <div class="panel-heading">
-                  <p class="eyebrow">Directory</p>
-                  <h2>User records</h2>
-                  <p class="panel-copy">Track blacklist state, HWID presence, and linked Roblox names.</p>
-                </div>
+          <div class="dashboard-panel" data-dashboard-panel="inventory">
+            <section class="inventory-grid" id="inventory">
+              <section class="admin-card inventory-card" data-reveal>
+                <div class="library-head">
+                  <div class="panel-heading">
+                    <p class="eyebrow">Inventory</p>
+                    <h2>Key ledger</h2>
+                    <p class="panel-copy">Search issued, active, premium, revoked, and expired keys.</p>
+                  </div>
 
-                <label class="search-field">
-                  <span>Search users</span>
-                  <input id="user-search" placeholder="Search Discord ID, tag, Roblox user, or blacklist reason..." />
-                </label>
-              </div>
-
-              <div id="user-list" class="data-stack"></div>
-            </section>
-          </section>
-
-          <section class="inventory-grid">
-            <section class="admin-card inventory-card" data-reveal>
-              <div class="library-head">
-                <div class="panel-heading">
-                  <p class="eyebrow">Activity</p>
-                  <h2>Audit stream</h2>
-                  <p class="panel-copy">Recent admin, key, and moderation events from the shared system log.</p>
-                </div>
-
-                <label class="search-field">
-                  <span>Search activity</span>
-                  <input id="audit-search" placeholder="Search actor, action, target, or details..." />
-                </label>
-              </div>
-
-              <div id="audit-list" class="data-stack"></div>
-            </section>
-
-            <section class="admin-card inventory-card" data-reveal>
-              <div class="library-head">
-                <div class="panel-heading">
-                  <p class="eyebrow">Moderation</p>
-                  <h2>Stored moderation actions</h2>
-                  <p class="panel-copy">Live and historical moderation entries written by the Discord bot.</p>
-                </div>
-              </div>
-
-              <div id="moderation-list" class="data-stack"></div>
-            </section>
-          </section>
-
-          <section class="workspace-grid">
-            <section class="admin-card editor-card" data-reveal>
-              <div class="panel-heading">
-                <p class="eyebrow">Script studio</p>
-                <h2>Create or update a library entry</h2>
-                <p class="panel-copy">
-                  Save by slug. If the slug already exists, the script card and raw endpoint will update in place.
-                </p>
-              </div>
-
-              <form id="script-form" class="admin-form">
-                <input id="script-edit-id" type="hidden" />
-
-                <div class="field-grid">
-                  <label>
-                    <span>Script Title</span>
-                    <input id="script-title" name="title" placeholder="Arsenal Rage" required />
-                  </label>
-                  <label>
-                    <span>Script Slug</span>
-                    <input id="script-slug" name="slug" placeholder="arsenal-rage" required />
+                  <label class="search-field">
+                    <span>Search keys</span>
+                    <input id="key-search" placeholder="Search key, Roblox user, Discord ID, type, or status..." />
                   </label>
                 </div>
 
-                <div class="field-grid">
-                  <label>
-                    <span>Place ID</span>
-                    <input id="script-place-id" name="placeId" placeholder="286090429" />
-                  </label>
-                  <label>
-                    <span>Status Label</span>
-                    <input id="script-status-label" name="statusLabel" placeholder="Working" />
-                  </label>
-                </div>
-
-                <label>
-                  <span>Cover Image URL</span>
-                  <input
-                    id="script-cover-image"
-                    name="coverImage"
-                    placeholder="https://images.example.com/arsenal-card.jpg"
-                  />
-                </label>
-
-                <label>
-                  <span>Feature Tags</span>
-                  <input
-                    id="script-feature-list"
-                    name="featureList"
-                    placeholder="Silent Aim, ESP, Auto Farm"
-                  />
-                </label>
-
-                <label>
-                  <span>Description</span>
-                  <textarea
-                    id="script-description"
-                    name="description"
-                    rows="3"
-                    placeholder="Short library description shown on the card."
-                  ></textarea>
-                </label>
-
-                <label>
-                  <span>Load From File</span>
-                  <input id="script-file" type="file" accept=".lua,.txt,.luau,.json,.js,.ts,.md" />
-                </label>
-
-                <label>
-                  <span>Script Content</span>
-                  <textarea
-                    id="script-content"
-                    name="content"
-                    rows="16"
-                    placeholder="Paste your Lua or loader script here..."
-                    required
-                  ></textarea>
-                </label>
-
-                <div class="admin-form-actions">
-                  <button id="script-save-button" type="submit">Save Script</button>
-                  <button id="script-reset-button" class="ghost-button" type="button">Reset Form</button>
-                </div>
-              </form>
-
-              <div id="script-feedback" class="admin-feedback hidden"></div>
-            </section>
-
-            <aside class="admin-side-column">
-              <section class="admin-card preview-card-shell" data-reveal>
-                <div class="panel-heading">
-                  <p class="eyebrow">Live preview</p>
-                  <h2>How this card will look</h2>
-                </div>
-                <div id="script-preview" class="script-preview"></div>
+                <div id="key-list" class="data-stack"></div>
               </section>
 
-              <section class="admin-card helper-card" data-reveal>
-                <p class="eyebrow">Distribution note</p>
-                <h2>Loader-ready output</h2>
-                <p class="panel-copy">
-                  Every saved script automatically gets a raw route and a generated loadstring copy action in both the
-                  dashboard and the public library.
-                </p>
-              </section>
-            </aside>
-          </section>
+              <section class="admin-card inventory-card" data-reveal>
+                <div class="library-head">
+                  <div class="panel-heading">
+                    <p class="eyebrow">Directory</p>
+                    <h2>User records</h2>
+                    <p class="panel-copy">Track blacklist state, HWID presence, and linked Roblox names.</p>
+                  </div>
 
-          <section class="admin-card library-shell" data-reveal>
-            <div class="library-head">
-              <div class="panel-heading">
-                <p class="eyebrow">Published scripts</p>
-                <h2>Library cards</h2>
-                <p class="panel-copy">Search, edit, delete, or copy loader links from the live library inventory.</p>
+                  <label class="search-field">
+                    <span>Search users</span>
+                    <input id="user-search" placeholder="Search Discord ID, tag, Roblox user, or blacklist reason..." />
+                  </label>
+                </div>
+
+                <div id="user-list" class="data-stack"></div>
+              </section>
+            </section>
+          </div>
+
+          <div class="dashboard-panel" data-dashboard-panel="activity">
+            <section class="inventory-grid">
+              <section class="admin-card inventory-card" data-reveal>
+                <div class="library-head">
+                  <div class="panel-heading">
+                    <p class="eyebrow">Activity</p>
+                    <h2>Audit stream</h2>
+                    <p class="panel-copy">Recent admin, key, and moderation events from the shared system log.</p>
+                  </div>
+
+                  <label class="search-field">
+                    <span>Search activity</span>
+                    <input id="audit-search" placeholder="Search actor, action, target, or details..." />
+                  </label>
+                </div>
+
+                <div id="audit-list" class="data-stack"></div>
+              </section>
+
+              <section class="admin-card inventory-card" data-reveal>
+                <div class="library-head">
+                  <div class="panel-heading">
+                    <p class="eyebrow">Moderation</p>
+                    <h2>Stored actions</h2>
+                    <p class="panel-copy">Live and historical moderation entries written by the Discord bot.</p>
+                  </div>
+                </div>
+
+                <div id="moderation-list" class="data-stack"></div>
+              </section>
+            </section>
+          </div>
+
+          <div class="dashboard-panel" data-dashboard-panel="scripts">
+            <section class="workspace-grid">
+              <section class="admin-card editor-card" data-reveal>
+                <div class="panel-heading">
+                  <p class="eyebrow">Script studio</p>
+                  <h2>Create or update a library entry</h2>
+                  <p class="panel-copy">Save by slug and update cards in place.</p>
+                </div>
+
+                <form id="script-form" class="admin-form">
+                  <input id="script-edit-id" type="hidden" />
+
+                  <div class="field-grid">
+                    <label>
+                      <span>Script Title</span>
+                      <input id="script-title" name="title" placeholder="Arsenal Rage" required />
+                    </label>
+                    <label>
+                      <span>Script Slug</span>
+                      <input id="script-slug" name="slug" placeholder="arsenal-rage" required />
+                    </label>
+                  </div>
+
+                  <div class="field-grid">
+                    <label>
+                      <span>Place ID</span>
+                      <input id="script-place-id" name="placeId" placeholder="286090429" />
+                    </label>
+                    <label>
+                      <span>Status Label</span>
+                      <input id="script-status-label" name="statusLabel" placeholder="Working" />
+                    </label>
+                  </div>
+
+                  <label>
+                    <span>Cover Image URL</span>
+                    <input
+                      id="script-cover-image"
+                      name="coverImage"
+                      placeholder="https://images.example.com/arsenal-card.jpg"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Feature Tags</span>
+                    <input
+                      id="script-feature-list"
+                      name="featureList"
+                      placeholder="Silent Aim, ESP, Auto Farm"
+                    />
+                  </label>
+
+                  <label>
+                    <span>Description</span>
+                    <textarea
+                      id="script-description"
+                      name="description"
+                      rows="3"
+                      placeholder="Short library description shown on the card."
+                    ></textarea>
+                  </label>
+
+                  <label>
+                    <span>Load From File</span>
+                    <input id="script-file" type="file" accept=".lua,.txt,.luau,.json,.js,.ts,.md" />
+                  </label>
+
+                  <label>
+                    <span>Script Content</span>
+                    <textarea
+                      id="script-content"
+                      name="content"
+                      rows="16"
+                      placeholder="Paste your Lua or loader script here..."
+                      required
+                    ></textarea>
+                  </label>
+
+                  <div class="admin-form-actions">
+                    <button id="script-save-button" type="submit">Save Script</button>
+                    <button id="script-reset-button" class="ghost-button" type="button">Reset Form</button>
+                  </div>
+                </form>
+
+                <div id="script-feedback" class="admin-feedback hidden"></div>
+              </section>
+
+              <aside class="admin-side-column">
+                <section class="admin-card preview-card-shell" data-reveal>
+                  <div class="panel-heading">
+                    <p class="eyebrow">Preview</p>
+                    <h2>Library card</h2>
+                  </div>
+                  <div id="script-preview" class="script-preview"></div>
+                </section>
+
+                <section class="admin-card helper-card" data-reveal>
+                  <p class="eyebrow">Output</p>
+                  <h2>Loader-ready</h2>
+                  <p class="panel-copy">Each script gets a raw route and a ready-to-copy loadstring.</p>
+                </section>
+              </aside>
+            </section>
+
+            <section class="admin-card library-shell" data-reveal>
+              <div class="library-head">
+                <div class="panel-heading">
+                  <p class="eyebrow">Published scripts</p>
+                  <h2>Library cards</h2>
+                  <p class="panel-copy">Search, edit, delete, or copy loader links from the live library.</p>
+                </div>
+
+                <label class="search-field">
+                  <span>Search library</span>
+                  <input id="script-search" placeholder="Search title, place ID, status, or feature tag..." />
+                </label>
               </div>
 
-              <label class="search-field">
-                <span>Search library</span>
-                <input id="script-search" placeholder="Search title, place ID, status, or feature tag..." />
-              </label>
-            </div>
+              <div id="script-empty-state" class="empty-state hidden">
+                No scripts uploaded yet. Save your first script to create a public library card.
+              </div>
 
-            <div id="script-empty-state" class="empty-state hidden">
-              No scripts uploaded yet. Save your first script to create a public library card.
-            </div>
-
-            <div id="script-list" class="script-library-grid"></div>
-          </section>
+              <div id="script-list" class="script-library-grid"></div>
+            </section>
+          </div>
         </section>
       </main>
     </div>

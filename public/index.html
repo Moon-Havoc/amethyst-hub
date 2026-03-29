@@ -31,9 +31,9 @@
         </a>
 
         <nav class="topnav">
-          <a href="#access">01_ACCESS</a>
-          <a href="/scripts">02_SCRIPTS</a>
-          <a href="#commands">03_COMMANDS</a>
+          <a href="#access">Access</a>
+          <a href="/scripts">Scripts</a>
+          <a href="#commands">Commands</a>
         </nav>
 
         <div class="topbar-actions">
@@ -59,30 +59,29 @@
               </div>
             </div>
             <p class="eyebrow">001_LUMINIA_ACCESS_CORE</p>
-            <h1>Luminia Hub access, scripts, and Discord control.</h1>
+            <h1>Keys, scripts, and Discord control.</h1>
 
             <div class="hero-meta">
-              <span class="meta-live">LIVE_STACK</span>
-              <span>24H_KEYS</span>
-              <span>LIFETIME_PREMIUM</span>
-              <span>ROBLOX_VALIDATION</span>
+              <span class="meta-live">LIVE</span>
+              <span>24H KEYS</span>
+              <span>PREMIUM</span>
+              <span>ROBLOX SYNC</span>
             </div>
 
             <p class="hero-paragraph">
-              The Luminia stack connects your public key portal, Railway API, Roblox verification GUI, and Discord
-              operations into one access system built for fast issuance, private delivery, and clean revocation.
+              One place for user access, script delivery, and staff control.
             </p>
 
             <div class="hero-actions">
-              <a class="primary-button" href="#access">OPEN_ACCESS_PANEL</a>
-              <a class="secondary-button" href="/scripts">VIEW_SCRIPT_LIBRARY</a>
+              <a class="primary-button" href="#access">Open Access</a>
+              <a class="secondary-button" href="/scripts">Script Library</a>
               <a
                 class="secondary-button"
                 href="https://discord.gg/vFdWTQ3uKC"
                 target="_blank"
                 rel="noreferrer"
               >
-                JOIN_DISCORD
+                Join Discord
               </a>
             </div>
           </div>
@@ -126,30 +125,27 @@
         <section class="feature-strip">
           <article class="feature-card" data-reveal>
             <span>01</span>
-            <h2>Normal access</h2>
-            <p>Users generate or renew a normal key from the site and reuse it until the 24-hour window ends.</p>
+            <h2>24-hour keys</h2>
+            <p>Users generate and renew normal access directly from the site.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span>02</span>
-            <h2>Premium access</h2>
-            <p>Staff issue permanent premium keys through Discord with private DM delivery and revocation notices.</p>
+            <h2>Premium</h2>
+            <p>Staff issue lifetime keys with DM delivery and quick revocation.</p>
           </article>
           <article class="feature-card" data-reveal>
             <span>03</span>
-            <h2>Script ops</h2>
-            <p>Admins upload versioned scripts in the dashboard and get raw URLs ready for loaders or Roblox tooling.</p>
+            <h2>Script library</h2>
+            <p>Upload releases once and ship raw links or loaders from the dashboard.</p>
           </article>
         </section>
 
         <section id="access" class="content-grid">
           <section class="panel access-panel" data-reveal>
-            <div class="panel-head">
-              <p class="eyebrow">NORMAL_KEY_PORTAL</p>
-              <h2>Generate or renew a user key</h2>
-              <p>
-                This page is the public-facing panel for normal access. Premium access, script uploads, and direct
-                operational control live inside the dashboard and Discord.
-              </p>
+              <div class="panel-head">
+                <p class="eyebrow">NORMAL_KEY_PORTAL</p>
+              <h2>Generate a normal key</h2>
+              <p>Public access panel for 24-hour keys.</p>
             </div>
 
             <div id="prefill-banner" class="prefill-banner hidden">
@@ -172,7 +168,7 @@
               </label>
 
               <div class="form-actions">
-                <button id="generate-button" type="submit">GENERATE_KEY</button>
+                <button id="generate-button" type="submit">Generate Key</button>
                 <p class="form-note">Issued format: `LUM_15Characters`</p>
               </div>
             </form>
@@ -184,24 +180,24 @@
             <section id="distribution" class="panel" data-reveal>
               <div class="panel-head">
                 <p class="eyebrow">SCRIPT_DISTRIBUTION</p>
-                <h2>Admin upload pipeline</h2>
+                <h2>Script delivery</h2>
               </div>
 
               <div class="distribution-list">
                 <article>
                   <span class="distribution-tag">DASHBOARD</span>
-                  <h3>Secure admin login</h3>
-                <p>The `/admin` panel lets approved accounts upload, edit, delete, and copy raw script links.</p>
+                  <h3>Admin dashboard</h3>
+                <p>Manage uploads, users, keys, and live actions in one place.</p>
               </article>
               <article>
                 <span class="distribution-tag">RAW_URLS</span>
-                <h3>Instant script endpoints</h3>
-                  <p>Each saved script gets a raw API route you can plug into loaders, tools, and internal delivery.</p>
+                <h3>Loader-ready output</h3>
+                  <p>Every script gets a raw route for loaders, tools, and private delivery.</p>
                 </article>
                 <article>
                   <span class="distribution-tag">VALIDATION</span>
-                  <h3>Roblox key gating</h3>
-                  <p>The GUI only unlocks if the submitted key is active and belongs to that exact Roblox username.</p>
+                  <h3>Username match</h3>
+                  <p>Verification only succeeds when the key belongs to that Roblox username.</p>
                 </article>
               </div>
             </section>
@@ -209,30 +205,30 @@
             <section class="panel" data-reveal>
               <div class="panel-head">
                 <p class="eyebrow">ACCESS_RULES</p>
-                <h2>Rule set</h2>
+                <h2>Access rules</h2>
               </div>
 
               <div class="rule-grid">
                 <article>
                   <strong>Normal</strong>
-                  <p>24-hour lifetime. Reuse while active, regenerate after expiry.</p>
+                  <p>24 hours. Renew after expiry.</p>
                 </article>
                 <article>
                   <strong>Premium</strong>
-                  <p>Never expires. Issued and revoked by staff through Discord.</p>
+                  <p>Never expires. Staff managed.</p>
                 </article>
                 <article>
                   <strong>DM Delivery</strong>
-                  <p>Sensitive keys are sent privately instead of being exposed in public channels.</p>
+                  <p>Keys are delivered privately when possible.</p>
                 </article>
                 <article>
                   <strong>Username Match</strong>
-                  <p>Validation succeeds only when the Roblox username matches the one recorded with the key.</p>
+                  <p>Verification is tied to the recorded Roblox user.</p>
                 </article>
               </div>
 
               <div class="form-actions">
-                <a class="secondary-button" href="/admin">OPEN_ADMIN_DASHBOARD</a>
+                <a class="secondary-button" href="/admin">Open Admin</a>
               </div>
             </section>
           </div>
@@ -241,26 +237,23 @@
         <section class="panel community-panel" data-reveal>
           <div class="community-copy">
             <p class="eyebrow">COMMUNITY_CHANNEL</p>
-            <h2>Need updates, support, or script drops?</h2>
-            <p>
-              Join the official Luminia Hub Discord to get announcements, talk with staff, and keep up with new
-              releases from the library.
-            </p>
+            <h2>Need support or updates?</h2>
+            <p>Join the Luminia Hub Discord for releases, support, and announcements.</p>
           </div>
 
           <div class="community-actions">
             <a class="primary-button" href="https://discord.gg/vFdWTQ3uKC" target="_blank" rel="noreferrer">
-              JOIN_THE_DISCORD
+              Join Discord
             </a>
-            <a class="secondary-button" href="/scripts">BROWSE_SCRIPTS</a>
+            <a class="secondary-button" href="/scripts">Browse Scripts</a>
           </div>
         </section>
 
         <section id="commands" class="panel command-panel" data-reveal>
           <div class="panel-head">
             <p class="eyebrow">DISCORD_OPERATIONS</p>
-            <h2>Command surface</h2>
-            <p>Moderation, premium access, blacklist control, HWID reset, and diagnostics all live inside Discord.</p>
+            <h2>Discord commands</h2>
+            <p>Access, moderation, blacklist control, and diagnostics live in Discord.</p>
           </div>
 
           <div class="command-grid">
