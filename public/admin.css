@@ -96,16 +96,11 @@ body {
 }
 
 .admin-brand-mark {
-  display: grid;
-  place-items: center;
   width: 3rem;
   height: 3rem;
   border-radius: 1rem;
-  font-family: "Oxanium", sans-serif;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #03101f;
-  background: linear-gradient(135deg, var(--accent-bright), var(--accent-soft));
+  object-fit: cover;
+  border: 1px solid rgba(127, 197, 255, 0.18);
   box-shadow: 0 0 36px rgba(90, 168, 255, 0.22);
 }
 
