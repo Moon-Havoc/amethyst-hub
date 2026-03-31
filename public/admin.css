@@ -187,6 +187,7 @@ button:hover {
 .admin-main {
   display: grid;
   gap: 1.1rem;
+  min-width: 0;
 }
 
 .admin-card {
@@ -266,7 +267,8 @@ h1,
 h2,
 h3 {
   margin: 0;
-  line-height: 0.96;
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
 h1 {
@@ -316,6 +318,7 @@ h3 {
   background: var(--panel-strong);
   border: 1px solid var(--panel-border);
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 .metric-label {
@@ -326,6 +329,9 @@ h3 {
 
 .metric-card strong {
   font-size: 1.2rem;
+  display: block;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .dashboard-switcher {
@@ -359,6 +365,7 @@ h3 {
 .dashboard-panel.is-active {
   display: grid;
   gap: 1rem;
+  min-width: 0;
 }
 
 .workspace-grid {
@@ -392,6 +399,7 @@ h3 {
   border-radius: var(--radius-md);
   border: 1px solid rgba(108, 166, 255, 0.12);
   background: rgba(8, 13, 22, 0.72);
+  min-width: 0;
 }
 
 .automod-wide-panel {
@@ -414,6 +422,15 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.9rem;
+}
+
+.ops-grid > *,
+.inventory-grid > *,
+.metric-grid > *,
+.field-grid > *,
+.library-head > *,
+.panel-heading {
+  min-width: 0;
 }
 
 label {
@@ -498,6 +515,7 @@ input[type="checkbox"] {
 
 .small-copy {
   font-size: 0.86rem;
+  overflow-wrap: anywhere;
 }
 
 .compact-form {
@@ -714,6 +732,22 @@ input[type="checkbox"] {
 .panel-heading {
   display: grid;
   gap: 0.25rem;
+  min-width: 0;
+}
+
+.panel-heading > *,
+.panel-copy,
+.subcopy,
+.status-chip,
+.admin-brand strong,
+.admin-brand small,
+.toggle-field strong,
+.toggle-field small,
+.data-card-title,
+.data-card-summary,
+.data-card-meta {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .data-stack {
