@@ -6,7 +6,7 @@
     <title>Luminia Hub</title>
     <meta
       name="description"
-      content="Luminia Hub is the blue-lit access engine for web keys, Discord administration, and Roblox validation."
+      content="Luminia Hub is the deep-blue access layer for public keys, script delivery, Roblox validation, and Discord staff operations."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,6 +21,7 @@
   <body>
     <div class="grid-overlay"></div>
     <div class="blue-glow glow-left"></div>
+    <div class="blue-glow glow-top"></div>
     <div class="blue-glow glow-right"></div>
 
     <div class="page-shell">
@@ -32,8 +33,9 @@
 
         <nav class="topnav">
           <a href="#access">Access</a>
+          <a href="#lanes">Lanes</a>
           <a href="/scripts">Scripts</a>
-          <a href="#commands">Commands</a>
+          <a href="#operations">Ops</a>
         </nav>
 
         <div class="topbar-actions">
@@ -48,33 +50,27 @@
         </div>
       </header>
 
-      <main>
+      <main class="site-main">
         <section class="hero-grid">
           <div class="hero-copy" data-reveal>
             <div class="hero-brand-panel">
               <img class="hero-brand-logo" src="/assets/luminia-logo.png" alt="Luminia Hub logo" />
               <div>
                 <strong>LUMINIA HUB</strong>
-                <span>Blue-lit access engine</span>
+                <span>Deep-blue access layer</span>
               </div>
             </div>
-            <p class="eyebrow">001_LUMINIA_ACCESS_CORE</p>
-            <h1>Access and delivery for Luminia Hub.</h1>
 
-            <div class="hero-meta">
-              <span class="meta-live">LIVE</span>
-              <span>24H KEYS</span>
-              <span>ROBLOX SYNC</span>
-              <span>DISCORD STAFF TOOLS</span>
-            </div>
-
+            <p class="eyebrow">LUMINIA_STACK / ACCESS_CORE</p>
+            <h1>Deep-blue access control for keys, scripts, and Discord delivery.</h1>
             <p class="hero-paragraph">
-              Clean user access on the web, paid script delivery through Discord, and one control layer for staff.
+              One polished surface for public key generation, paid-script routing, Roblox validation, and staff-side
+              control.
             </p>
 
             <div class="hero-actions">
               <a class="primary-button" href="#access">Open Access</a>
-              <a class="secondary-button" href="/scripts">Script Library</a>
+              <a class="secondary-button" href="/scripts">Browse Scripts</a>
               <a
                 class="secondary-button"
                 href="https://discord.gg/vFdWTQ3uKC"
@@ -84,213 +80,307 @@
                 Join Discord
               </a>
             </div>
+
+            <div class="hero-stat-grid">
+              <article class="hero-stat-card">
+                <span>Public lane</span>
+                <strong>24H keys</strong>
+              </article>
+              <article class="hero-stat-card">
+                <span>Paid lanes</span>
+                <strong>Scope locked</strong>
+              </article>
+              <article class="hero-stat-card">
+                <span>Validation</span>
+                <strong>User + script aware</strong>
+              </article>
+            </div>
           </div>
 
-          <aside class="hero-terminal" data-reveal>
-            <div class="terminal-window">
-              <img class="terminal-watermark" src="/assets/luminia-logo.png" alt="" aria-hidden="true" />
-              <div class="terminal-topbar">
-                <span class="terminal-dot"></span>
-                <span class="terminal-dot"></span>
-                <span class="terminal-dot"></span>
-                <strong>luminia_runtime</strong>
+          <div class="hero-stack">
+            <aside class="panel terminal-panel" data-reveal>
+              <div class="terminal-window">
+                <img class="terminal-watermark" src="/assets/luminia-logo.png" alt="" aria-hidden="true" />
+                <div class="terminal-topbar">
+                  <span class="terminal-dot"></span>
+                  <span class="terminal-dot"></span>
+                  <span class="terminal-dot"></span>
+                  <strong>luminia_runtime</strong>
+                </div>
+
+                <div class="terminal-body" id="terminal-body">
+                  <p data-terminal-line data-text="$ [gateway] Syncing access lanes to Discord services.">
+                    $ [gateway] Syncing access lanes to Discord services.
+                  </p>
+                  <p data-terminal-line data-text="$ [portal] Public key generator awaiting requests.">
+                    $ [portal] Public key generator awaiting requests.
+                  </p>
+                  <p data-terminal-line data-text="$ [library] Script scopes loaded: bb, sab, arsenal.">
+                    $ [library] Script scopes loaded: bb, sab, arsenal.
+                  </p>
+                  <p data-terminal-line data-text="$ [verify] Roblox username and scope validation online.">
+                    $ [verify] Roblox username and scope validation online.
+                  </p>
+                  <p class="terminal-success" data-terminal-line data-text="$ [status] Control plane stable.">
+                    $ [status] Control plane stable.
+                  </p>
+                  <div class="terminal-cursor" aria-hidden="true"></div>
+                </div>
               </div>
+            </aside>
 
-              <div class="terminal-body" id="terminal-body">
-                <p data-terminal-line data-text="$ [system] Booting Luminia access engine...">
-                  $ [system] Booting Luminia access engine...
-                </p>
-                <p data-terminal-line data-text="$ [web] Key portal online and awaiting requests.">
-                  $ [web] Key portal online and awaiting requests.
-                </p>
-                <p data-terminal-line data-text="$ [discord] Premium issue and revoke routes armed.">
-                  $ [discord] Premium issue and revoke routes armed.
-                </p>
-                <p data-terminal-line data-text="$ [roblox] Username-bound validation active.">
-                  $ [roblox] Username-bound validation active.
-                </p>
-                <p
-                  class="terminal-success"
-                  data-terminal-line
-                  data-text="$ [status] Gateway + API synchronized."
-                >
-                  $ [status] Gateway + API synchronized.
-                </p>
-                <div class="terminal-cursor" aria-hidden="true"></div>
-              </div>
-            </div>
-          </aside>
-        </section>
-
-        <section class="feature-strip">
-          <article class="feature-card" data-reveal>
-            <span>01</span>
-            <h2>Normal access</h2>
-            <p>Self-serve 24-hour keys from the public portal.</p>
-          </article>
-          <article class="feature-card" data-reveal>
-            <span>02</span>
-            <h2>Paid scripts</h2>
-            <p>Blade Ball, Steal A Brainrot, and Arsenal stay script-locked.</p>
-          </article>
-          <article class="feature-card" data-reveal>
-            <span>03</span>
-            <h2>Staff control</h2>
-            <p>Discord bot tools and the admin dashboard stay in sync.</p>
-          </article>
-        </section>
-
-        <section id="access" class="content-grid">
-          <section class="panel access-panel" data-reveal>
+            <section class="panel stack-panel" data-reveal>
               <div class="panel-head">
-                <p class="eyebrow">ACCESS_PORTAL</p>
-              <h2 id="access-panel-title">Generate a normal key</h2>
-              <p id="access-panel-copy">Public access panel for 24-hour keys.</p>
-            </div>
+                <p class="eyebrow">STACK_MAP</p>
+                <h2>Three delivery lanes</h2>
+                <p>Clear routing for public keys, premium issuance, and script-specific access.</p>
+              </div>
 
-            <div id="prefill-banner" class="prefill-banner hidden">
-              <span class="prefill-tag">GUI_PREFILL</span>
-              <span id="prefill-copy"></span>
-            </div>
+              <div class="route-list">
+                <article class="route-card">
+                  <span class="route-tag">01</span>
+                  <h3>Public</h3>
+                  <p>Users generate normal keys on the website and renew every 24 hours.</p>
+                </article>
+                <article class="route-card">
+                  <span class="route-tag">02</span>
+                  <h3>Premium</h3>
+                  <p>Staff issue timed premium access privately through Discord with full visibility.</p>
+                </article>
+                <article class="route-card">
+                  <span class="route-tag">03</span>
+                  <h3>Script locked</h3>
+                  <p>Blade Ball, Steal A Brainrot, and Arsenal stay isolated to their own paid keys.</p>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
 
-            <div id="normal-access-view">
-              <form id="key-form" class="access-form">
-                <label>
-                  <span>Discord User ID</span>
-                  <input id="discordUserId" name="discordUserId" placeholder="123456789012345678" required />
-                </label>
-                <label>
-                  <span>Discord Tag or Username</span>
-                  <input id="discordTag" name="discordTag" placeholder="user#0001 or user" required />
-                </label>
-                <label>
-                  <span>Roblox Username</span>
-                  <input id="robloxUser" name="robloxUser" placeholder="RobloxUsername" required />
-                </label>
+        <section class="overview-band">
+          <article class="overview-card" data-reveal>
+            <span class="overview-index">01</span>
+            <h2>Clean public portal</h2>
+            <p>Simple 24-hour key generation without exposing staff-side tooling.</p>
+          </article>
+          <article class="overview-card" data-reveal>
+            <span class="overview-index">02</span>
+            <h2>Paid access routing</h2>
+            <p>Users get sent to the right Discord command instead of the wrong generator.</p>
+          </article>
+          <article class="overview-card" data-reveal>
+            <span class="overview-index">03</span>
+            <h2>Shared control layer</h2>
+            <p>The site, bot, and admin dashboard work from one live dataset.</p>
+          </article>
+          <article class="overview-card" data-reveal>
+            <span class="overview-index">04</span>
+            <h2>Fast verification</h2>
+            <p>Roblox validation checks the correct username and expected script scope.</p>
+          </article>
+        </section>
+
+        <section id="access" class="section-shell">
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">ACCESS_PORTAL</p>
+            <h2>Open the right lane</h2>
+            <p>Normal users generate public keys here. Premium and paid-script users get routed to staff issuance.</p>
+          </div>
+
+          <div class="access-grid">
+            <section class="panel access-panel" data-reveal>
+              <div class="panel-head compact-head">
+                <div>
+                  <p class="eyebrow">PORTAL</p>
+                  <h2 id="access-panel-title">Generate a normal key</h2>
+                </div>
+                <p id="access-panel-copy">Public access panel for 24-hour keys.</p>
+              </div>
+
+              <div id="prefill-banner" class="prefill-banner hidden">
+                <span class="prefill-tag">GUI_PREFILL</span>
+                <span id="prefill-copy"></span>
+              </div>
+
+              <div id="normal-access-view">
+                <form id="key-form" class="access-form">
+                  <label>
+                    <span>Discord User ID</span>
+                    <input id="discordUserId" name="discordUserId" placeholder="123456789012345678" required />
+                  </label>
+                  <label>
+                    <span>Discord Tag or Username</span>
+                    <input id="discordTag" name="discordTag" placeholder="user#0001 or user" required />
+                  </label>
+                  <label>
+                    <span>Roblox Username</span>
+                    <input id="robloxUser" name="robloxUser" placeholder="RobloxUsername" required />
+                  </label>
+
+                  <div class="form-actions">
+                    <button id="generate-button" type="submit">Generate Key</button>
+                    <p class="form-note">Format: `LUM_15Characters`</p>
+                  </div>
+                </form>
+
+                <div id="result" class="result-card hidden"></div>
+              </div>
+
+              <div id="paid-access-view" class="paid-access-view hidden">
+                <div class="lane-callout-grid">
+                  <article class="lane-callout">
+                    <span class="distribution-tag">PAID_ACCESS</span>
+                    <h3 id="paid-access-title">Paid script key required</h3>
+                    <p id="paid-access-description">
+                      This script uses a staff-issued paid key. Normal website keys will not unlock it.
+                    </p>
+                  </article>
+
+                  <article class="lane-callout">
+                    <span class="distribution-tag">DISCORD_COMMAND</span>
+                    <code id="paid-access-command">~bb {user} {robloxuser}</code>
+                    <p id="paid-access-command-copy">Ask staff to issue the correct key for this Roblox username.</p>
+                  </article>
+                </div>
 
                 <div class="form-actions">
-                  <button id="generate-button" type="submit">Generate Key</button>
-                  <p class="form-note">Issued format: `LUM_15Characters`</p>
+                  <a
+                    class="primary-button"
+                    href="https://discord.gg/vFdWTQ3uKC"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open Discord
+                  </a>
+                  <a class="secondary-button" href="/scripts">View Script Library</a>
                 </div>
-              </form>
-
-              <div id="result" class="result-card hidden"></div>
-            </div>
-
-            <div id="paid-access-view" class="paid-access-view hidden">
-              <div class="paid-access-grid">
-                <article>
-                  <span class="distribution-tag">PAID_ACCESS</span>
-                  <h3 id="paid-access-title">Paid script key required</h3>
-                  <p id="paid-access-description">
-                    This script uses a staff-issued paid key. Normal website keys will not unlock it.
-                  </p>
-                </article>
-                <article>
-                  <span class="distribution-tag">DISCORD_COMMAND</span>
-                  <code id="paid-access-command">~bb {user} {robloxuser}</code>
-                  <p id="paid-access-command-copy">Ask staff to issue the correct key for this Roblox username.</p>
-                </article>
               </div>
+            </section>
 
-              <div class="form-actions">
+            <aside class="sidebar-stack">
+              <section id="lanes" class="panel" data-reveal>
+                <div class="panel-head">
+                  <p class="eyebrow">LANE_INDEX</p>
+                  <h2>Access lanes</h2>
+                  <p>Every route is isolated so users only receive the access they are supposed to use.</p>
+                </div>
+
+                <div class="lane-grid">
+                  <article>
+                    <strong>Normal</strong>
+                    <p>Public website lane. 24-hour duration.</p>
+                  </article>
+                  <article>
+                    <strong>Premium</strong>
+                    <p>Staff-issued in Discord with `~prem-gen` and a set duration.</p>
+                  </article>
+                  <article>
+                    <strong>Blade Ball</strong>
+                    <p>Script-locked key from `~bb`.</p>
+                  </article>
+                  <article>
+                    <strong>Steal A Brainrot</strong>
+                    <p>Script-locked key from `~sab`.</p>
+                  </article>
+                  <article>
+                    <strong>Arsenal</strong>
+                    <p>Script-locked key from `~arsenal`.</p>
+                  </article>
+                  <article>
+                    <strong>Verification</strong>
+                    <p>Only passes on the right Roblox username and matching script scope.</p>
+                  </article>
+                </div>
+              </section>
+
+              <section class="panel" data-reveal>
+                <div class="panel-head">
+                  <p class="eyebrow">FLOW_GUIDE</p>
+                  <h2>What users do</h2>
+                  <p>Short path, minimal confusion, and cleaner support handoffs.</p>
+                </div>
+
+                <div class="flow-list">
+                  <article>
+                    <span>01</span>
+                    <div>
+                      <strong>Pick the lane</strong>
+                      <p>Normal users stay on the website. Paid users go to Discord.</p>
+                    </div>
+                  </article>
+                  <article>
+                    <span>02</span>
+                    <div>
+                      <strong>Receive the key</strong>
+                      <p>Normal keys appear here. Staff-issued keys arrive by DM.</p>
+                    </div>
+                  </article>
+                  <article>
+                    <span>03</span>
+                    <div>
+                      <strong>Validate in Roblox</strong>
+                      <p>The key only works for the saved Roblox username and expected script.</p>
+                    </div>
+                  </article>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section-shell">
+          <div class="library-preview panel" data-reveal>
+            <div class="library-preview-copy">
+              <p class="eyebrow">LIBRARY_LAYER</p>
+              <h2>Keep public access and script browsing separate.</h2>
+              <p>
+                The main site handles access cleanly. The library stays focused on scripts, loaders, status, and game
+                coverage.
+              </p>
+              <div class="hero-actions compact-actions">
+                <a class="primary-button" href="/scripts">Open Script Library</a>
                 <a
-                  class="primary-button"
+                  class="secondary-button"
                   href="https://discord.gg/vFdWTQ3uKC"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Open Discord
+                  Ask Staff
                 </a>
-                <a class="secondary-button" href="/scripts">View Script Library</a>
               </div>
             </div>
-          </section>
 
-          <div class="stacked-panels">
-            <section id="distribution" class="panel" data-reveal>
-              <div class="panel-head">
-                <p class="eyebrow">SYSTEM_FLOW</p>
-                <h2>How access moves</h2>
-              </div>
-
-              <div class="distribution-list">
-                <article>
-                  <span class="distribution-tag">WEB</span>
-                  <h3>Normal users</h3>
-                  <p>Generate a 24-hour key and renew when it expires.</p>
-                </article>
-                <article>
-                  <span class="distribution-tag">DISCORD</span>
-                  <h3>Paid access</h3>
-                  <p>Staff issue premium or script-specific keys privately by DM.</p>
-                </article>
-                <article>
-                  <span class="distribution-tag">VERIFY</span>
-                  <h3>Roblox check</h3>
-                  <p>Validation only passes on the right username and matching script scope.</p>
-                </article>
-              </div>
-            </section>
-
-            <section class="panel" data-reveal>
-              <div class="panel-head">
-                <p class="eyebrow">KEY_LANES</p>
-                <h2>Access lanes</h2>
-              </div>
-
-              <div class="rule-grid">
-                <article>
-                  <strong>Normal</strong>
-                  <p>24 hours. Generated from the public site.</p>
-                </article>
-                <article>
-                  <strong>Premium</strong>
-                  <p>Timed by staff with `~prem-gen {user} {robloxuser} {duration}`.</p>
-                </article>
-                <article>
-                  <strong>Paid Scripts</strong>
-                  <p>Blade Ball, Steal A Brainrot, and Arsenal use script-locked keys.</p>
-                </article>
-                <article>
-                  <strong>Verification</strong>
-                  <p>Keys are tied to the recorded Roblox user and expected script.</p>
-                </article>
-              </div>
-
-              <div class="form-actions">
-                <a class="secondary-button" href="/scripts">Open Library</a>
-              </div>
-            </section>
+            <div class="preview-card-grid">
+              <article class="preview-card">
+                <span class="distribution-tag">BLADE BALL</span>
+                <strong>Script-locked delivery</strong>
+                <p>Paid users stay on the right lane and never fall back to public keys.</p>
+              </article>
+              <article class="preview-card">
+                <span class="distribution-tag">RELEASES</span>
+                <strong>Loader-ready cards</strong>
+                <p>Search games, check status, and copy a loader from one organized grid.</p>
+              </article>
+              <article class="preview-card">
+                <span class="distribution-tag">SUPPORT</span>
+                <strong>Discord-first help</strong>
+                <p>Staff can issue keys, troubleshoot routes, and direct users without confusion.</p>
+              </article>
+            </div>
           </div>
         </section>
 
-        <section class="panel community-panel" data-reveal>
-          <div class="community-copy">
-            <p class="eyebrow">COMMUNITY_CHANNEL</p>
-            <h2>Need support or updates?</h2>
-            <p>Join the Luminia Hub Discord for releases, support, and announcements.</p>
-          </div>
-
-          <div class="community-actions">
-            <a class="primary-button" href="https://discord.gg/vFdWTQ3uKC" target="_blank" rel="noreferrer">
-              Join Discord
-            </a>
-            <a class="secondary-button" href="/scripts">Browse Scripts</a>
-          </div>
-        </section>
-
-        <section id="commands" class="panel command-panel" data-reveal>
-          <div class="panel-head">
+        <section id="operations" class="section-shell">
+          <div class="section-head" data-reveal>
             <p class="eyebrow">DISCORD_OPERATIONS</p>
             <h2>Discord side</h2>
-            <p>Commands stay in Discord. The site handles access, while staff tools stay private.</p>
+            <p>Commands stay private to staff while the website stays clean and user-facing.</p>
           </div>
 
           <div class="command-grid">
             <article class="command-block" data-reveal>
               <h3>Issuance</h3>
-              <p>Normal keys, timed premium access, and paid-script keys are all issued here.</p>
+              <p>Normal, premium, and script-specific access all route through Discord when staff need control.</p>
               <div class="command-pill-row">
                 <code>~gen-key</code>
                 <code>~prem-gen</code>
@@ -302,7 +392,7 @@
 
             <article class="command-block" data-reveal>
               <h3>Control</h3>
-              <p>Blacklist, reset, revoke, and diagnostics stay with staff in Discord.</p>
+              <p>Revokes, blacklists, resets, and diagnostics stay grouped under the same staff workflow.</p>
               <div class="command-pill-row">
                 <code>~revoke_key</code>
                 <code>~revoke_prem</code>
@@ -314,7 +404,7 @@
 
             <article class="command-block" data-reveal>
               <h3>Moderation</h3>
-              <p>Ban, kick, mute, roles, and the admin dashboard all use the same live bot.</p>
+              <p>Live server actions are mirrored by the dashboard, so staff can work from Discord or the web.</p>
               <div class="command-pill-row">
                 <code>~ban</code>
                 <code>~kick</code>
@@ -327,13 +417,30 @@
 
             <article class="command-block" data-reveal>
               <h3>Auto-Mod</h3>
-              <p>A first-pass filter is live for external invites, mass mentions, and repeat spam.</p>
+              <p>Shared automation rules now live across Discord and the admin dashboard with the same settings.</p>
               <div class="command-pill-row">
-                <code>Invite links</code>
-                <code>Mass mentions</code>
-                <code>Repeat spam</code>
+                <code>~automod status</code>
+                <code>~automod preset</code>
+                <code>~automod toggle</code>
+                <code>~automod set</code>
               </div>
             </article>
+          </div>
+        </section>
+
+        <section class="panel community-band" data-reveal>
+          <div class="community-copy">
+            <p class="eyebrow">COMMUNITY_CHANNEL</p>
+            <h2>Need support, keys, or script access?</h2>
+            <p>Join the Luminia Hub Discord for releases, paid access requests, support, and announcements.</p>
+          </div>
+
+          <div class="community-actions">
+            <a class="primary-button" href="https://discord.gg/vFdWTQ3uKC" target="_blank" rel="noreferrer">
+              Join Discord
+            </a>
+            <a class="secondary-button" href="/scripts">Browse Scripts</a>
+            <a class="secondary-button" href="/admin">Admin Panel</a>
           </div>
         </section>
       </main>

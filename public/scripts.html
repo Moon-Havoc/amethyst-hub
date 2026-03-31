@@ -6,12 +6,12 @@
     <title>Luminia Hub Scripts</title>
     <meta
       name="description"
-      content="Browse the Luminia Hub script library, search by place ID, and copy ready-to-run loader strings."
+      content="Browse the Luminia Hub script library, filter by release state, and copy ready-to-run loaders."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/png" href="/assets/luminia-logo.png" />
@@ -19,7 +19,10 @@
     <link rel="stylesheet" href="/scripts.css" />
   </head>
   <body>
-    <div class="noise-overlay"></div>
+    <div class="grid-overlay"></div>
+    <div class="blue-glow glow-left"></div>
+    <div class="blue-glow glow-top"></div>
+    <div class="blue-glow glow-right"></div>
 
     <div class="library-shell">
       <header class="topbar">
@@ -33,7 +36,7 @@
 
         <nav class="topnav">
           <a href="/">Home</a>
-          <a href="#library">Scripts</a>
+          <a href="#library">Library</a>
           <a href="https://discord.gg/vFdWTQ3uKC" target="_blank" rel="noreferrer">Discord</a>
         </nav>
 
@@ -49,36 +52,79 @@
         </div>
       </header>
 
-      <main>
+      <main class="library-main">
         <section class="hero" data-reveal>
           <div class="hero-copy">
             <div class="hero-brand-panel">
               <img class="hero-brand-logo" src="/assets/luminia-logo.png" alt="Luminia Hub logo" />
               <div>
                 <strong>LUMINIA HUB</strong>
-                <span>Script network</span>
+                <span>Release network</span>
               </div>
             </div>
-            <p class="eyebrow">LUMINIA_LIBRARY</p>
-            <h1>Script library</h1>
-            <p class="hero-text">Search releases and copy loader strings in one click.</p>
+
+            <p class="eyebrow">LIBRARY_GRID / LIVE_RELEASES</p>
+            <h1>Organized script delivery for the Luminia stack.</h1>
+            <p class="hero-text">
+              Search game releases, check status at a glance, and copy a loader without digging through Discord.
+            </p>
+
+            <div class="hero-actions">
+              <a class="primary-button" href="#library">Open Library</a>
+              <a class="secondary-button" href="https://discord.gg/vFdWTQ3uKC" target="_blank" rel="noreferrer">
+                Request Access
+              </a>
+            </div>
+
+            <div class="hero-metrics">
+              <article class="metric-card">
+                <span>Total releases</span>
+                <strong id="hero-total-count">0</strong>
+              </article>
+              <article class="metric-card">
+                <span>Working</span>
+                <strong id="hero-working-count">0</strong>
+              </article>
+              <article class="metric-card">
+                <span>Watchlist</span>
+                <strong id="hero-watch-count">0</strong>
+              </article>
+            </div>
           </div>
 
-          <label class="search-box">
-            <span>Search scripts</span>
-            <input id="library-search" placeholder="Search title, place ID, status, or features..." />
-          </label>
+          <aside class="hero-side">
+            <label class="search-box">
+              <span>Search scripts</span>
+              <input id="library-search" placeholder="Search title, place ID, status, or features..." />
+            </label>
+
+            <div id="status-filter-group" class="filter-toolbar">
+              <button class="filter-chip is-active" type="button" data-status-filter="all">All</button>
+              <button class="filter-chip" type="button" data-status-filter="stable">Working</button>
+              <button class="filter-chip" type="button" data-status-filter="beta">Beta</button>
+              <button class="filter-chip" type="button" data-status-filter="maintenance">Maintenance</button>
+              <button class="filter-chip" type="button" data-status-filter="dormant">Dormant</button>
+            </div>
+
+            <div class="hero-note">
+              <p class="eyebrow">FLOW</p>
+              <h2>How to use it</h2>
+              <p>Pick a release, copy the loader, and use Discord if you need a paid or private route instead.</p>
+            </div>
+          </aside>
         </section>
 
         <section id="library" class="library-panel" data-reveal>
           <div class="panel-head">
-              <div>
-                <p class="eyebrow">LIVE_COLLECTION</p>
-                <h2>Live releases</h2>
-              </div>
+            <div>
+              <p class="eyebrow">LIVE_COLLECTION</p>
+              <h2>Current releases</h2>
+            </div>
+
             <div class="panel-meta">
               <span id="script-count">0 scripts</span>
-              <span>Live sync</span>
+              <span id="visible-count">0 visible</span>
+              <span id="library-active-filter">All statuses</span>
             </div>
           </div>
 
@@ -87,6 +133,24 @@
           </div>
 
           <div id="library-grid" class="library-grid"></div>
+        </section>
+
+        <section class="support-grid">
+          <article class="support-card panel" data-reveal>
+            <p class="eyebrow">SUPPORT</p>
+            <h2>Need help or a paid route?</h2>
+            <p>Use Discord for support tickets, premium issuance, and script-specific access requests.</p>
+            <a class="primary-button" href="https://discord.gg/vFdWTQ3uKC" target="_blank" rel="noreferrer">
+              Open Discord
+            </a>
+          </article>
+
+          <article class="support-card panel" data-reveal>
+            <p class="eyebrow">PUBLISHING</p>
+            <h2>Shipping a new release?</h2>
+            <p>The admin dashboard handles covers, tags, raw routes, and loader-ready publishing in one place.</p>
+            <a class="secondary-button" href="/admin">Open Admin</a>
+          </article>
         </section>
       </main>
     </div>

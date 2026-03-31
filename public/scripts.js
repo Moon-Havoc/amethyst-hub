@@ -3,9 +3,24 @@ const librarySearch = document.getElementById("library-search");
 const libraryEmpty = document.getElementById("library-empty");
 const servicePill = document.getElementById("service-pill");
 const scriptCount = document.getElementById("script-count");
+const visibleCount = document.getElementById("visible-count");
+const activeFilterLabel = document.getElementById("library-active-filter");
+const heroTotalCount = document.getElementById("hero-total-count");
+const heroWorkingCount = document.getElementById("hero-working-count");
+const heroWatchCount = document.getElementById("hero-watch-count");
+const filterButtons = [...document.querySelectorAll("[data-status-filter]")];
 const toast = document.getElementById("toast");
 
 let scripts = [];
+let activeStatusFilter = "all";
+
+const FILTER_LABELS = {
+  all: "All statuses",
+  stable: "Working",
+  beta: "Beta",
+  maintenance: "Maintenance",
+  dormant: "Dormant",
+};
 
 function setServiceStatus(mode, label) {
   servicePill.classList.remove("loading", "online", "offline");
@@ -54,12 +69,9 @@ function showToast(message) {
 
 function filteredScripts() {
   const query = librarySearch.value.trim().toLowerCase();
-  if (!query) {
-    return scripts;
-  }
 
-  return scripts.filter((script) =>
-    [
+  return scripts.filter((script) => {
+    const matchesQuery = !query || [
       script.title,
       script.slug,
       script.description,
@@ -70,8 +82,16 @@ function filteredScripts() {
     ]
       .join(" ")
       .toLowerCase()
-      .includes(query),
-  );
+      .includes(query);
+
+    const tone = toneFromStatus(script.status_label);
+    const matchesFilter = activeStatusFilter === "all" || tone === activeStatusFilter;
+    return matchesQuery && matchesFilter;
+  });
+}
+
+function countByTone(tone) {
+  return scripts.filter((script) => toneFromStatus(script.status_label) === tone).length;
 }
 
 function createCard(script) {
@@ -165,14 +185,31 @@ function createCard(script) {
   return card;
 }
 
+function renderMetrics(visibleScripts) {
+  scriptCount.textContent = `${scripts.length} ${scripts.length === 1 ? "script" : "scripts"}`;
+  visibleCount.textContent = `${visibleScripts.length} visible`;
+  activeFilterLabel.textContent = FILTER_LABELS[activeStatusFilter] || "All statuses";
+  heroTotalCount.textContent = String(scripts.length);
+  heroWorkingCount.textContent = String(countByTone("stable"));
+  heroWatchCount.textContent = String(countByTone("beta") + countByTone("maintenance"));
+}
+
+function renderFilterState() {
+  filterButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.statusFilter === activeStatusFilter);
+  });
+}
+
 function renderScripts() {
   const visibleScripts = filteredScripts();
   libraryGrid.innerHTML = "";
+  renderMetrics(visibleScripts);
+  renderFilterState();
+
   libraryEmpty.classList.toggle("hidden", visibleScripts.length > 0);
-  scriptCount.textContent = `${scripts.length} ${scripts.length === 1 ? "script" : "scripts"}`;
   if (!visibleScripts.length) {
     libraryEmpty.textContent = scripts.length
-      ? "No scripts matched that search."
+      ? "No scripts matched that search or status filter."
       : "No scripts have been published yet. Upload a library item from the admin dashboard first.";
   }
 
@@ -209,6 +246,13 @@ async function loadHealth() {
 }
 
 librarySearch.addEventListener("input", renderScripts);
+
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeStatusFilter = button.dataset.statusFilter || "all";
+    renderScripts();
+  });
+});
 
 libraryGrid.addEventListener("click", async (event) => {
   const button = event.target.closest("[data-copy-loader]");
