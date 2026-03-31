@@ -87,6 +87,13 @@ Also included:
 - The versioned Roblox key GUI scripts live in `integrations/roblox/`.
 - They currently point to the live Railway deployment at `https://luminia-hub-production.up.railway.app`.
 - If your production domain changes later, update `SITE_URL` near the bottom of the Lua file you are using.
+- The shared unscoped loader is now `integrations/roblox/amethyst.lua`.
+
+## Remaining external rename steps
+
+- The live Railway URL still contains `luminia` because generated Railway domains follow the current service name.
+- If you rename the Railway service or switch fully to a custom domain like `amethyst-hub.is-a.dev`, update `SITE_URL` in Railway and in the Roblox Lua files.
+- If you want the GitHub URL to match too, rename the repository from `luminia-hub` to `amethyst-hub` in GitHub settings.
 
 ## Admin dashboard
 

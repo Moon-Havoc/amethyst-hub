@@ -68,7 +68,6 @@
   };
 
   window.AmethystSite = api;
-  window.LuminiaSite = api;
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => initReveal());
