@@ -29,12 +29,26 @@ Amethyst Hub is a combined website and Discord bot for issuing access keys, trac
 - `~mute {user} {duration} {reason}`
 - `~role {user} {role}`
 - `~purge {count}`
+- `~config`
 - `~verify {user}`
 - `~unverify {user}`
+- `~verify-role {role}`
+- `~unverified-role {role}`
+- `~autorole {role}`
+- `~welcome-channel {channel}`
+- `~welcome-message {text}`
+- `~welcome-test [user]`
 - `~setup status`
 - `~setup verify-role|unverified-role|autorole|welcome-channel {value|off}`
 - `~setup welcome-message {text|off}`
 - `~setup welcome-test [user]`
+- `~automod on|off`
+- `~automod logs {channel|off}`
+- `~automod allow-domain {domain}`
+- `~automod allow-invite {code}`
+- `~automod block-word {phrase}`
+- `~automod exempt-role {role}`
+- `~automod exempt-channel {channel}`
 - `~unban {user}`
 - `~unmute {user}`
 - `~commands`
@@ -89,6 +103,8 @@ Also included:
 - `~prem-gen` accepts durations like `30m`, `12h`, or `7d`.
 - `~bloxfruits` issues a Blox Fruits-only paid key that will not validate on other routes.
 - `~verify`, `~unverify`, and the `~setup` commands handle verification, autorole, and welcome configuration directly from Discord.
+- `~config`, `~verify-role`, `~unverified-role`, `~autorole`, `~welcome-channel`, and `~welcome-message` are the faster onboarding aliases for staff.
+- `~automod on`, `~automod off`, `~automod logs`, `~automod allow-domain`, `~automod allow-invite`, `~automod block-word`, and `~automod exempt-role` are the faster automod shortcuts for staff.
 - `~unban` works best with a user ID.
 - Use `~commands` to show the current command list in Discord.
 - Use `~check-perms` to confirm the bot's server permissions and get a role hierarchy reminder.
@@ -111,6 +127,7 @@ Also included:
 
 - Visit `/admin` to sign in and manage uploadable scripts.
 - Admin accounts come from `ADMIN_USERS`, which is a comma-separated list of `username:password` pairs.
+- The dashboard can now also manage onboarding settings like verification roles, unverified roles, autorole, and welcome message/channel.
 - Library entries support title, slug, place ID, status label, cover image URL, feature tags, description, and script content.
 - Saved scripts are exposed as raw URLs at `/api/scripts/{slug}/raw`.
 - The public `/scripts` page lets users search the library and copy a ready-to-run loadstring for each script.

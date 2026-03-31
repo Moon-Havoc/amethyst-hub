@@ -342,6 +342,85 @@
 
                 <div id="discord-action-feedback" class="admin-feedback hidden"></div>
               </section>
+
+              <section class="quick-panel">
+                <div class="panel-heading">
+                  <p class="eyebrow">Server onboarding</p>
+                  <h3>Verification, autorole, welcome</h3>
+                  <p class="panel-copy">
+                    These settings control join roles, verification flow, and the welcome message the bot sends.
+                  </p>
+                </div>
+
+                <form id="guild-features-form" class="admin-form compact-form">
+                  <div class="field-grid">
+                    <label>
+                      <span>Verification Role ID</span>
+                      <input id="guild-verify-role" placeholder="123456789012345678" />
+                    </label>
+                    <label>
+                      <span>Unverified Role ID</span>
+                      <input id="guild-unverified-role" placeholder="123456789012345678" />
+                    </label>
+                  </div>
+
+                  <div class="field-grid">
+                    <label>
+                      <span>Auto Role ID</span>
+                      <input id="guild-auto-role" placeholder="123456789012345678" />
+                    </label>
+                    <label>
+                      <span>Welcome Channel ID</span>
+                      <input id="guild-welcome-channel" placeholder="123456789012345678" />
+                    </label>
+                  </div>
+
+                  <label>
+                    <span>Welcome Message</span>
+                    <textarea
+                      id="guild-welcome-message"
+                      rows="4"
+                      placeholder="Welcome to {server}, {user}! You are member #{membercount}."
+                    ></textarea>
+                  </label>
+
+                  <div class="admin-form-actions split-actions">
+                    <button id="guild-features-save-button" type="submit">Save Onboarding</button>
+                    <button id="guild-features-reset-button" class="ghost-button" type="button">Reset Form</button>
+                  </div>
+                </form>
+
+                <div id="guild-features-feedback" class="admin-feedback hidden"></div>
+              </section>
+
+              <section class="quick-panel">
+                <div class="panel-heading">
+                  <p class="eyebrow">Discord shortcuts</p>
+                  <h3>Faster setup commands</h3>
+                  <p class="panel-copy">Short aliases for the bot if you want to configure everything without leaving Discord.</p>
+                </div>
+
+                <div class="command-pill-row">
+                  <code>~config</code>
+                  <code>~verify-role</code>
+                  <code>~unverified-role</code>
+                  <code>~autorole</code>
+                  <code>~welcome-channel</code>
+                  <code>~welcome-message</code>
+                  <code>~welcome-test</code>
+                </div>
+
+                <div class="command-pill-row">
+                  <code>~automod on</code>
+                  <code>~automod off</code>
+                  <code>~automod logs</code>
+                  <code>~automod allow-domain</code>
+                  <code>~automod allow-invite</code>
+                  <code>~automod block-word</code>
+                  <code>~automod exempt-role</code>
+                  <code>~automod exempt-channel</code>
+                </div>
+              </section>
               </div>
             </section>
           </div>
@@ -620,6 +699,14 @@
                   <p class="eyebrow">Save changes</p>
                   <h2>Push live automod updates</h2>
                   <p class="panel-copy">These settings take effect immediately for the Discord bot and the admin panel.</p>
+                </div>
+
+                <div class="command-pill-row">
+                  <code>~automod preset balanced</code>
+                  <code>~automod on</code>
+                  <code>~automod logs #mod-logs</code>
+                  <code>~automod allow-domain youtube.com</code>
+                  <code>~automod block-word scam link</code>
                 </div>
 
                 <div class="admin-form-actions split-actions">

@@ -6,6 +6,7 @@ const { performDiscordAdminAction } = require("./discord-admin");
 const { createOrReuseKey, revokeKey, resetHwid, setBlacklist, validateKey } = require("./key-service");
 const { allScopeConfigs, isRecognizedScope, keyTypeForScope, normalizeAccessScope } = require("./access-scopes");
 const { applyAutoModPreset, getAutoModConfig, listEnabledRules, saveAutoModConfig } = require("./automod");
+const { getGuildFeatures, saveGuildFeatures } = require("./guild-features");
 const {
   authenticateAdmin,
   clearAdminCookie,
@@ -128,6 +129,14 @@ function adminActorTag(adminUser) {
   return `admin:${adminUser}`;
 }
 
+function adminGuildId(req) {
+  const guildId = String(req.body?.guildId || req.query?.guildId || config.discordGuildId || "").trim();
+  if (!guildId) {
+    throw new Error("DISCORD_GUILD_ID is required to manage onboarding settings.");
+  }
+  return guildId;
+}
+
 function getDashboardPayload() {
   runMaintenance();
 
@@ -137,6 +146,8 @@ function getDashboardPayload() {
   const auditLogs = statements.listAuditLogs.all();
   const moderationActions = statements.listModerationActions.all();
   const autoMod = getAutoModConfig();
+  const guildId = String(config.discordGuildId || "").trim();
+  const guildFeatures = guildId ? getGuildFeatures(guildId) : null;
 
   return {
     overview: {
@@ -158,6 +169,8 @@ function getDashboardPayload() {
     auditLogs,
     moderationActions,
     autoMod,
+    guildFeatures,
+    guildId,
   };
 }
 
@@ -280,6 +293,22 @@ app.get("/api/admin/automod", requireAdminApi, (req, res) => {
     ok: true,
     config: getAutoModConfig(),
   });
+});
+
+app.get("/api/admin/guild-features", requireAdminApi, (req, res) => {
+  try {
+    const guildId = adminGuildId(req);
+    return res.json({
+      ok: true,
+      guildId,
+      guildFeatures: getGuildFeatures(guildId),
+    });
+  } catch (error) {
+    return res.status(400).json({
+      ok: false,
+      error: error.message,
+    });
+  }
 });
 
 app.get("/api/scripts", (req, res) => {
@@ -521,6 +550,33 @@ app.post("/api/admin/automod", requireAdminApi, (req, res) => {
     return res.json({
       ok: true,
       config,
+      dashboard: getDashboardPayload(),
+    });
+  } catch (error) {
+    return res.status(400).json({
+      ok: false,
+      error: error.message,
+    });
+  }
+});
+
+app.post("/api/admin/guild-features", requireAdminApi, (req, res) => {
+  try {
+    const guildId = adminGuildId(req);
+    const updates = req.body?.guildFeatures || req.body || {};
+    if (!updates || typeof updates !== "object" || Array.isArray(updates)) {
+      throw new Error("Guild features payload must be an object.");
+    }
+
+    const guildFeatures = saveGuildFeatures(guildId, updates, {
+      actorId: req.adminUser,
+      actorTag: adminActorTag(req.adminUser),
+    });
+
+    return res.json({
+      ok: true,
+      guildId,
+      guildFeatures,
       dashboard: getDashboardPayload(),
     });
   } catch (error) {

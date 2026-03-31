@@ -66,6 +66,13 @@ const COMMAND_DESCRIPTIONS = [
   `\`${BOT_PREFIX}purge {count}\` - remove recent messages from the current channel`,
   `\`${BOT_PREFIX}verify {user}\` - apply the configured verification role`,
   `\`${BOT_PREFIX}unverify {user}\` - remove the configured verification role`,
+  `\`${BOT_PREFIX}config\` - show current onboarding config`,
+  `\`${BOT_PREFIX}verify-role {role}\` - set the verification role quickly`,
+  `\`${BOT_PREFIX}unverified-role {role}\` - set the unverified role quickly`,
+  `\`${BOT_PREFIX}autorole {role}\` - set the join autorole quickly`,
+  `\`${BOT_PREFIX}welcome-channel {channel}\` - set the welcome channel quickly`,
+  `\`${BOT_PREFIX}welcome-message {text}\` - set the welcome message quickly`,
+  `\`${BOT_PREFIX}welcome-test [user]\` - preview the welcome embed quickly`,
   `\`${BOT_PREFIX}unban {userId}\` - unban a user by ID`,
   `\`${BOT_PREFIX}commands\` - show this list`,
   `\`${BOT_PREFIX}check-perms\` - check the bot's Discord permissions in this server`,
@@ -73,6 +80,13 @@ const COMMAND_DESCRIPTIONS = [
   `\`${BOT_PREFIX}setup verify-role|unverified-role|autorole|welcome-channel {value|off}\` - configure onboarding roles and channels`,
   `\`${BOT_PREFIX}setup welcome-message {text|off}\` - set the welcome text. Tokens: {user}, {server}, {membercount}`,
   `\`${BOT_PREFIX}setup welcome-test [user]\` - preview the current welcome message`,
+  `\`${BOT_PREFIX}automod on|off\` - quickly enable or disable auto-mod`,
+  `\`${BOT_PREFIX}automod logs {channel|off}\` - set the automod log channel quickly`,
+  `\`${BOT_PREFIX}automod allow-domain {domain}\` - whitelist a domain quickly`,
+  `\`${BOT_PREFIX}automod allow-invite {code}\` - whitelist a Discord invite quickly`,
+  `\`${BOT_PREFIX}automod block-word {phrase}\` - add a blocked phrase quickly`,
+  `\`${BOT_PREFIX}automod exempt-role {role}\` - exempt a role quickly`,
+  `\`${BOT_PREFIX}automod exempt-channel {channel}\` - exempt a channel quickly`,
   `\`${BOT_PREFIX}automod status\` - show current automod state, actions, and live rules`,
   `\`${BOT_PREFIX}automod toggle {setting} {on|off}\` - enable or disable a rule or action`,
   `\`${BOT_PREFIX}automod set {setting} {value}\` - change thresholds, timeout, or log channel`,
@@ -604,6 +618,13 @@ async function handleSetup(message, args) {
       color: "info",
       title: "Setup Command Guide",
       description: [
+        `\`${config.commandPrefix}config\``,
+        `\`${config.commandPrefix}verify-role @role\``,
+        `\`${config.commandPrefix}unverified-role @role\``,
+        `\`${config.commandPrefix}autorole @role\``,
+        `\`${config.commandPrefix}welcome-channel #channel\``,
+        `\`${config.commandPrefix}welcome-message Welcome to {server}, {user}!\``,
+        `\`${config.commandPrefix}welcome-test [user]\``,
         `\`${config.commandPrefix}setup status\``,
         `\`${config.commandPrefix}setup verify-role @role\``,
         `\`${config.commandPrefix}setup unverified-role @role\``,
@@ -1214,6 +1235,37 @@ async function resolveAutoModListValue(message, path, rawArgs) {
   }
 }
 
+async function applyAutoModListShortcut(message, path, operation, rawArgs, title) {
+  const value = await resolveAutoModListValue(message, path, rawArgs);
+  const autoModConfig = updateAutoModList(
+    path,
+    operation,
+    value,
+    {
+      actorId: message.author.id,
+      actorTag: message.author.tag,
+    },
+  );
+
+  await replyEmbed(message, {
+    color: "success",
+    title,
+    description: `${AUTOMOD_LIST_LABELS[path]} ${operation === "remove" ? "updated" : "saved"}.`,
+    fields: [
+      {
+        name: "Value",
+        value: formatAutoModListValue(path, value),
+        inline: false,
+      },
+      {
+        name: "Current Count",
+        value: String(getAutoModListValues(autoModConfig, path).length),
+        inline: true,
+      },
+    ],
+  });
+}
+
 function formatAutoModSettingResult(setting, value) {
   if (setting.type === "ratio") {
     return `${Math.round(value * 100)}%`;
@@ -1231,7 +1283,7 @@ async function handleAutoModCommand(message, args) {
 
   const subcommand = String(args.shift() || "status").trim().toLowerCase();
 
-  if (["status", "show"].includes(subcommand)) {
+  if (["status", "show", "summary"].includes(subcommand)) {
     await sendAutoModStatus(message);
     return;
   }
@@ -1242,6 +1294,14 @@ async function handleAutoModCommand(message, args) {
       title: "Auto-Mod Command Guide",
       description: [
         `\`${config.commandPrefix}automod status\``,
+        `\`${config.commandPrefix}automod on\``,
+        `\`${config.commandPrefix}automod off\``,
+        `\`${config.commandPrefix}automod logs #mod-logs\``,
+        `\`${config.commandPrefix}automod allow-domain youtube.com\``,
+        `\`${config.commandPrefix}automod allow-invite vFdWTQ3uKC\``,
+        `\`${config.commandPrefix}automod block-word scam link\``,
+        `\`${config.commandPrefix}automod exempt-role @Trusted\``,
+        `\`${config.commandPrefix}automod exempt-channel #self-promo\``,
         `\`${config.commandPrefix}automod toggle links on\``,
         `\`${config.commandPrefix}automod set timeout 15\``,
         `\`${config.commandPrefix}automod set log-channel #mod-logs\``,
@@ -1252,6 +1312,114 @@ async function handleAutoModCommand(message, args) {
         `\`${config.commandPrefix}automod preset strict\``,
       ].join("\n"),
     });
+    return;
+  }
+
+  if (["on", "enable", "enabled"].includes(subcommand)) {
+    updateAutoModValue("enabled", true, {
+      actorId: message.author.id,
+      actorTag: message.author.tag,
+    });
+    await sendAutoModStatus(message, "Auto-Mod Enabled");
+    return;
+  }
+
+  if (["off", "disable", "disabled"].includes(subcommand)) {
+    updateAutoModValue("enabled", false, {
+      actorId: message.author.id,
+      actorTag: message.author.tag,
+    });
+    await sendAutoModStatus(message, "Auto-Mod Disabled");
+    return;
+  }
+
+  if (subcommand === "logs") {
+    const rawValue = args.join(" ").trim();
+    if (!rawValue) {
+      await replyUsage(message, `${config.commandPrefix}automod logs {#channel|off}`);
+      return;
+    }
+
+    const channelId = isClearValue(rawValue) ? "" : resolveChannelId(message.guild, rawValue);
+    if (!isClearValue(rawValue) && !channelId) {
+      await replyEmbed(message, {
+        color: "error",
+        title: "Channel Not Found",
+        description: "Use a channel mention, ID, or exact name.",
+      });
+      return;
+    }
+
+    updateAutoModValue("actions.logChannelId", channelId, {
+      actorId: message.author.id,
+      actorTag: message.author.tag,
+    });
+
+    await replyEmbed(message, {
+      color: "success",
+      title: "Auto-Mod Updated",
+      description: `Log channel set to **${channelId ? `<#${channelId}>` : "Not set"}**.`,
+    });
+    return;
+  }
+
+  if (subcommand === "allow-domain") {
+    await applyAutoModListShortcut(message, "allowedDomains", "add", args, "Allowed Domain Saved");
+    return;
+  }
+
+  if (subcommand === "unallow-domain") {
+    await applyAutoModListShortcut(message, "allowedDomains", "remove", args, "Allowed Domain Removed");
+    return;
+  }
+
+  if (subcommand === "allow-invite") {
+    await applyAutoModListShortcut(message, "allowedInviteCodes", "add", args, "Allowed Invite Saved");
+    return;
+  }
+
+  if (subcommand === "unallow-invite") {
+    await applyAutoModListShortcut(message, "allowedInviteCodes", "remove", args, "Allowed Invite Removed");
+    return;
+  }
+
+  if (subcommand === "block-word") {
+    await applyAutoModListShortcut(message, "blockedWords", "add", args, "Blocked Phrase Saved");
+    return;
+  }
+
+  if (subcommand === "unblock-word") {
+    await applyAutoModListShortcut(message, "blockedWords", "remove", args, "Blocked Phrase Removed");
+    return;
+  }
+
+  if (subcommand === "exempt-role") {
+    await applyAutoModListShortcut(message, "exemptRoleIds", "add", args, "Exempt Role Saved");
+    return;
+  }
+
+  if (subcommand === "unexempt-role") {
+    await applyAutoModListShortcut(message, "exemptRoleIds", "remove", args, "Exempt Role Removed");
+    return;
+  }
+
+  if (subcommand === "exempt-channel") {
+    await applyAutoModListShortcut(message, "exemptChannelIds", "add", args, "Exempt Channel Saved");
+    return;
+  }
+
+  if (subcommand === "unexempt-channel") {
+    await applyAutoModListShortcut(message, "exemptChannelIds", "remove", args, "Exempt Channel Removed");
+    return;
+  }
+
+  if (subcommand === "exempt-user") {
+    await applyAutoModListShortcut(message, "exemptUserIds", "add", args, "Exempt User Saved");
+    return;
+  }
+
+  if (subcommand === "unexempt-user") {
+    await applyAutoModListShortcut(message, "exemptUserIds", "remove", args, "Exempt User Removed");
     return;
   }
 
@@ -2235,6 +2403,27 @@ function createBot() {
           break;
         case "check-perms":
           await handleCheckPerms(message);
+          break;
+        case "config":
+          await handleSetup(message, ["status"]);
+          break;
+        case "verify-role":
+          await handleSetup(message, ["verify-role", ...args]);
+          break;
+        case "unverified-role":
+          await handleSetup(message, ["unverified-role", ...args]);
+          break;
+        case "autorole":
+          await handleSetup(message, ["autorole", ...args]);
+          break;
+        case "welcome-channel":
+          await handleSetup(message, ["welcome-channel", ...args]);
+          break;
+        case "welcome-message":
+          await handleSetup(message, ["welcome-message", ...args]);
+          break;
+        case "welcome-test":
+          await handleSetup(message, ["welcome-test", ...args]);
           break;
         case "automod":
           await handleAutoModCommand(message, args);

@@ -101,6 +101,15 @@ const discordActionRole = document.getElementById("discord-action-role");
 const discordActionReason = document.getElementById("discord-action-reason");
 const discordActionButton = document.getElementById("discord-action-button");
 const discordActionFeedback = document.getElementById("discord-action-feedback");
+const guildFeaturesForm = document.getElementById("guild-features-form");
+const guildVerifyRole = document.getElementById("guild-verify-role");
+const guildUnverifiedRole = document.getElementById("guild-unverified-role");
+const guildAutoRole = document.getElementById("guild-auto-role");
+const guildWelcomeChannel = document.getElementById("guild-welcome-channel");
+const guildWelcomeMessage = document.getElementById("guild-welcome-message");
+const guildFeaturesSaveButton = document.getElementById("guild-features-save-button");
+const guildFeaturesResetButton = document.getElementById("guild-features-reset-button");
+const guildFeaturesFeedback = document.getElementById("guild-features-feedback");
 
 const scriptForm = document.getElementById("script-form");
 const scriptEditId = document.getElementById("script-edit-id");
@@ -137,6 +146,8 @@ const state = {
   auditLogs: [],
   moderationActions: [],
   autoMod: null,
+  guildFeatures: null,
+  guildId: "",
 };
 
 let slugEditedManually = false;
@@ -607,6 +618,28 @@ function joinList(values) {
   return Array.isArray(values) ? values.join("\n") : "";
 }
 
+function fillGuildFeaturesForm(features) {
+  const current = features || {};
+  guildVerifyRole.value = current.verifyRoleId || "";
+  guildUnverifiedRole.value = current.unverifiedRoleId || "";
+  guildAutoRole.value = current.autoRoleId || "";
+  guildWelcomeChannel.value = current.welcomeChannelId || "";
+  guildWelcomeMessage.value = current.welcomeMessage || "";
+}
+
+function readGuildFeaturesForm() {
+  return {
+    guildId: state.guildId || "",
+    guildFeatures: {
+      verifyRoleId: guildVerifyRole.value.trim(),
+      unverifiedRoleId: guildUnverifiedRole.value.trim(),
+      autoRoleId: guildAutoRole.value.trim(),
+      welcomeChannelId: guildWelcomeChannel.value.trim(),
+      welcomeMessage: guildWelcomeMessage.value.trim(),
+    },
+  };
+}
+
 function automodRuleEntries(config) {
   return [
     ["Invite Filter", config.rules?.invites?.enabled],
@@ -759,6 +792,10 @@ function renderAutoMod() {
   }`;
 }
 
+function renderGuildFeatures() {
+  fillGuildFeaturesForm(state.guildFeatures);
+}
+
 function applyDashboard(payload) {
   state.overview = payload.overview || {};
   state.scripts = payload.scripts || [];
@@ -767,6 +804,8 @@ function applyDashboard(payload) {
   state.auditLogs = payload.auditLogs || [];
   state.moderationActions = payload.moderationActions || [];
   state.autoMod = payload.autoMod || null;
+  state.guildFeatures = payload.guildFeatures || null;
+  state.guildId = payload.guildId || "";
   renderDashboard();
 }
 
@@ -1045,6 +1084,7 @@ function renderModeration() {
 function renderDashboard() {
   renderMetrics();
   renderAutoMod();
+  renderGuildFeatures();
   renderScripts();
   renderKeys();
   renderUsers();
@@ -1362,6 +1402,32 @@ discordActionForm.addEventListener("submit", async (event) => {
   } finally {
     setBusy(discordActionButton, false, discordActionButton.dataset.idleLabel);
   }
+});
+
+guildFeaturesForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  clearFeedback(guildFeaturesFeedback);
+
+  try {
+    setBusy(guildFeaturesSaveButton, true, "Saving...");
+
+    const payload = await requestJson("/api/admin/guild-features", {
+      method: "POST",
+      body: JSON.stringify(readGuildFeaturesForm()),
+    });
+
+    applyDashboard(payload.dashboard);
+    setFeedback(guildFeaturesFeedback, "Onboarding settings saved successfully.", "success");
+  } catch (error) {
+    setFeedback(guildFeaturesFeedback, error.message, "error");
+  } finally {
+    setBusy(guildFeaturesSaveButton, false, guildFeaturesSaveButton.dataset.idleLabel);
+  }
+});
+
+guildFeaturesResetButton?.addEventListener("click", () => {
+  fillGuildFeaturesForm(state.guildFeatures);
+  clearFeedback(guildFeaturesFeedback);
 });
 
 scriptTitle.addEventListener("input", () => {
